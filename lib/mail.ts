@@ -32,7 +32,7 @@ export async function sendWelcomeEmail({ to, name }: SendWelcomeEmailParams) {
                 </p>
 
                 <div style="text-align: center; margin: 40px 0;">
-                    <a href=${process.env.NEXTAPP_BASE_URL} 
+                    <a href=${process.env.NEXT_PUBLIC_APP_URL} 
                         style="
                         background-color: #4b6cb7; 
                         color: white; 
@@ -65,4 +65,22 @@ export async function sendWelcomeEmail({ to, name }: SendWelcomeEmailParams) {
         subject: "Welcome to Startify! 🚀",
         html: htmlContent,
     });
+}
+
+
+export async function sendPasswordResetEmail(email: string, resetLink: string) {
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+        },
+    })
+
+    await transporter.sendMail({
+        from: `"Support" <${process.env.SMTP_USER}>`,
+        to: email,
+        subject: "Reset your password",
+        html: `<p>Click <a href="${resetLink}">here</a> to reset your password. This link will expire in 5 minutes.</p>`,
+    })
 }

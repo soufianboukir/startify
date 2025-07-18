@@ -23,7 +23,9 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 const { email, password } = credentials ?? {}
-                if (!email || !password) return null
+                if (!email || !password) {
+                    throw new Error("Invalid-credentials")
+                }
             
                 await dbConnection()
                 const user = await User.findOne({ email })
@@ -31,7 +33,9 @@ export const authOptions: NextAuthOptions = {
                 if (!user || !user.password) return null
             
                 const isValid = await bcrypt.compare(password, user.password)
-                if (!isValid) return null
+                if (!isValid) {
+                    throw new Error("Invalid-credentials")
+                }
             
                 return {
                     id: user._id.toString(),
@@ -46,6 +50,7 @@ export const authOptions: NextAuthOptions = {
 
     pages: {
         signIn: "/login",
+        error: "/login"
     },
 
     session: {

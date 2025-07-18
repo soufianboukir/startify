@@ -6,10 +6,11 @@ import { Label } from "./ui/label";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Loader } from "lucide-react";
-import { toast } from "sonner";
 import z from "zod";
 import { PasswordInput } from "./ui/password-input";
-// import { login } from '@/services/auth'
+import { api } from "@/config/api";
+import { useSearchParams } from "next/navigation";
+import axios, { AxiosError } from "axios";
 
 const resetPasswordSchema = z
   .object({
@@ -29,11 +30,15 @@ type ResetPasswordErrors = {
 const ResetPasswordForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [isReseted,setIsReseted] = useState(false)
+  const searchParams = useSearchParams()
   const [errors, setErrors] = useState<ResetPasswordErrors>({ password: "", r_password: "" });
   const [formData, setFormData] = useState({
     password: "",
     r_password: "",
   });
+  const email = searchParams.get('email');
+  const token = searchParams.get('token');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,10 +48,13 @@ const ResetPasswordForm = () => {
     }));
   };
 
-  // trying UI
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setError('')
+    setErrors({
+      password: '',
+      r_password: ''
+    })
     const result = resetPasswordSchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
@@ -62,22 +70,32 @@ const ResetPasswordForm = () => {
     }
     setLoading(true);
     try {
-      setTimeout(() => {
-        setLoading(false);
-        toast.success("Password has been reseted");
-      }, 1500);
+      const response = await api.post(`/reset-password`,{email,token,password: formData.password,confirmPassword: formData.r_password})
+
+      if(response.status === 200){
+        setIsReseted(true)
+      }
     } catch (err) {
-      if (err instanceof Error) {
+      if (axios.isAxiosError(err)) {
+        const axiosError = err as AxiosError<{ message: string }>;
+    
+        if (axiosError.response?.data?.message) {
+          setError(axiosError.response.data.message);
+        } else {
+          setError(axiosError.message);
+        }
+    
+      } else if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("An unexpected error occurred");
       }
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
   };
   return (
-        <Card className="w-full max-w-sm">
+        <Card className="w-full max-w-md">
             <CardHeader className="text-center">
                 <CardTitle className="text-xl">Reset password</CardTitle>
                 <CardDescription>Create a new password for your account</CardDescription>
@@ -111,6 +129,9 @@ const ResetPasswordForm = () => {
                                 {errors.r_password && (
                                 <div className="text-sm text-red-600">{errors.r_password}</div>
                                 )}
+                                {
+                                  isReseted && <div className="text-green-600 text-sm">Password has been reseted successfully</div>
+                                }
                             </div>
                             <Button
                                 type="submit"
@@ -119,7 +140,7 @@ const ResetPasswordForm = () => {
                             >
                                 {loading ? (
                                 <div>
-                                    <Loader className="animate-spin" />
+                                    <Loader className="animate-spin w-8 h-8" />
                                 </div>
                                 ) : (
                                 "Update password"

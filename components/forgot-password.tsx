@@ -7,25 +7,24 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Loader } from "lucide-react";
 import Link from "next/link";
-// import { forgotPassword } from "@/services/auth";
-// import { login } from '@/services/auth'
+import { api } from "@/config/api";
 
 const ForgotPasswordForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [email, setEmail] = useState("");
+  const [isSent, setIsSent] = useState(false)
 
-  // trying UI
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setIsSent(false)
     setError("");
     try {
-      //   const response = await forgotPassword(email);
-      //   if(response.status === 200){
-      // if the email exists or not (response from backend should be 200 as status)
-      // setIsSent(true)
-      //   }
+        const response = await api.post(`/forgot-password`,{email});
+        if(response.status === 200){
+          setIsSent(true)
+        }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -33,11 +32,11 @@ const ForgotPasswordForm = () => {
         setError("An unexpected error occurred");
       }
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
   };
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-md">
         <CardHeader className="text-center">
             <CardTitle className="text-xl font-semibold">Forgot password</CardTitle>
             <CardDescription>
@@ -60,10 +59,13 @@ const ForgotPasswordForm = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
+                        {
+                          isSent && <div className="text-green-600 text-sm">If email exists in our system, a reset link was sent</div>
+                        }
                     </div>
                     <Button disabled={loading} className="w-full cursor-pointer">
                         {
-                            loading ? <Loader className="w-8 h-8"/>: "Send reset link"
+                            loading ? <Loader className="w-8 h-8 animate-spin"/>: "Send reset link"
                         }
                     </Button>
                 </div>

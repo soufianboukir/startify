@@ -13,29 +13,49 @@ import Link from "next/link"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { PasswordInput } from "./ui/password-input"
-import { FormEvent, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import { Loader } from "lucide-react"
 import { toast } from "sonner"
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export function LoginForm() {
 
     const [loading,setLoading] = useState(false)
     const [oAuthLoading,setOAuthLoading] = useState(false)
     const [error,setError] = useState('')
+    const searchParams = useSearchParams();
     const router = useRouter()
     const [formData,setFormData] = useState({
         email: '',
         password: '',
     })
 
+
+    useEffect(() => {
+        const urlError = searchParams.get("error");
+        
+        if (urlError) {
+            switch (urlError) {
+                case "CredentialsSignin":
+                    setError(`Invalid credentials`);
+                    break;
+                default:
+                    setError("An authentication error occurred. Please try again.");
+            }
+            
+            const url = new URL(window.location.href);
+                url.searchParams.delete("error");
+                url.searchParams.delete("email");
+                window.history.replaceState({}, "", url.toString());
+            }
+    }, [searchParams]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
           ...prev,
           [name]: value,
-          
         }));
     };
     
@@ -50,14 +70,15 @@ export function LoginForm() {
                 redirect: false,
                 email: formData.email,
                 password: formData.password,
-            });
+            });            
         
             if (result?.error) {
-                setError(result.error);
+                if(result.error === 'CredentialsSignin'){
+                    setError('Invalid email or password.');
+                }
                 toast.error("Login failed: " + result.error);
             } else {
-                toast.success("Logged in successfully");
-                router.push("/dashboard"); 
+                router.push("/redirecting"); 
             }
         } catch (err) {
             if (err instanceof Error) {
@@ -74,9 +95,9 @@ export function LoginForm() {
         setOAuthLoading(true);
         await signIn("google", { callbackUrl: "/redirecting" });
         setOAuthLoading(false);
-      }
-  return (
-        <Card className="w-full max-w-sm">
+    }
+    return (
+        <Card className="w-full max-w-md">
             <CardHeader className="text-center">
                 <CardTitle className="text-xl font-semibold">Welcome back</CardTitle>
                 <CardDescription>
@@ -131,5 +152,5 @@ export function LoginForm() {
                 </Button>
             </CardContent>
         </Card>
-  )
+    )
 }
