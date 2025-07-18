@@ -28,6 +28,7 @@ const PasswordInput = ({ value, name, onChange, placeholder, className }: Passwo
         placeholder={placeholder}
         value={value}
         name={name}
+        required
         onChange={onChange}
       />
       <Button

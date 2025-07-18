@@ -16,11 +16,15 @@ import { PasswordInput } from "./ui/password-input"
 import { FormEvent, useState } from "react"
 import { Loader } from "lucide-react"
 import { toast } from "sonner"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 export function LoginForm() {
 
     const [loading,setLoading] = useState(false)
+    const [oAuthLoading,setOAuthLoading] = useState(false)
     const [error,setError] = useState('')
+    const router = useRouter()
     const [formData,setFormData] = useState({
         email: '',
         password: '',
@@ -36,29 +40,41 @@ export function LoginForm() {
     };
     
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) =>{
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError("");
+
         try {
-          // const response = await login(formData);
-          // if(response.status === 200){
-          // redirecting to dashboard based on the role
-          // }
-          setTimeout(() => {
-            setLoading(false);
-            toast.success("Logged in successfully");
-          }, 1500);
+            const result = await signIn("credentials", {
+                redirect: false,
+                email: formData.email,
+                password: formData.password,
+            });
+        
+            if (result?.error) {
+                setError(result.error);
+                toast.error("Login failed: " + result.error);
+            } else {
+                toast.success("Logged in successfully");
+                router.push("/dashboard"); 
+            }
         } catch (err) {
-          if (err instanceof Error) {
-            setError(err.message);
-          } else {
-            setError("An unexpected error occurred");
-          }
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("An unexpected error occurred");
+            }
         } finally {
-          // setLoading(false)
+            setLoading(false);
         }
-    }
+    };
+
+    async function handleGoogleOAuth() {
+        setOAuthLoading(true);
+        await signIn("google", { callbackUrl: "/redirecting" });
+        setOAuthLoading(false);
+      }
   return (
         <Card className="w-full max-w-sm">
             <CardHeader className="text-center">
@@ -98,14 +114,20 @@ export function LoginForm() {
                         </div>
                         <Button disabled={loading} className="w-full cursor-pointer">
                             {
-                                loading ? <Loader className="w-8 h-8"/>: "Login"
+                                loading ? <Loader className="w-8 h-8 animate-spin"/>: "Login"
                             }
                         </Button>
                     </div>
                 </form>
-                <Button variant="outline" className="w-full mt-8 cursor-pointer">
-                    <Image src={'/icons/google.svg'} width={25} height={25} alt="google icon"/>
-                    Sign in with google
+                <Button variant="outline" className="w-full mt-8 cursor-pointer" onClick={handleGoogleOAuth} disabled={oAuthLoading}>
+                    {
+                        oAuthLoading ?
+                        <Loader className="w-8 h-8 animate-spin"/>:
+                        <>
+                            <Image src={'/icons/google.svg'} width={25} height={25} alt="google icon"/>
+                            Sign in with google
+                        </>
+                    }
                 </Button>
             </CardContent>
         </Card>
