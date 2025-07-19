@@ -43,7 +43,10 @@ export const authOptions: NextAuthOptions = {
                     email: user.email,
                     image: user.image,
                     role: user.role,
-                    username: user.username
+                    username: user.username,
+                    headLine: user.headLine,
+                    bio: user.bio,
+                    website: user.bio
                 }
             },
         }),
@@ -79,6 +82,9 @@ export const authOptions: NextAuthOptions = {
             user.id = dbUser._id.toString();
             user.role = dbUser.role;
             user.username = dbUser.username;
+            user.headLine = dbUser.headLine;
+            user.bio = dbUser.bio;
+            user.website = dbUser.website
         
             return true;
         },
@@ -90,6 +96,9 @@ export const authOptions: NextAuthOptions = {
                 token.image = user.image
                 token.role = user.role
                 token.username = user.username
+                token.headLine = user.headLine
+                token.bio = user.bio
+                token.website = user.website
             }
             return token
           },
@@ -102,6 +111,9 @@ export const authOptions: NextAuthOptions = {
                 session.user.image = token.image
                 session.user.role = token.role
                 session.user.username = token.username
+                session.user.headLine = token.headLine
+                session.user.bio = token.bio
+                session.user.website = token.website
             }
             return session
         }          

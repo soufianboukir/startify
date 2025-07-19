@@ -4,5 +4,8 @@ export type User = {
     username: string;
     image: string;
     email: string;
+    headLine?: string
+    bio?: string
+    website?: string
     role: 'admin' | 'user';
 }
