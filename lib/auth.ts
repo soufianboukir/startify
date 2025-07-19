@@ -43,6 +43,7 @@ export const authOptions: NextAuthOptions = {
                     email: user.email,
                     image: user.image,
                     role: user.role,
+                    username: user.username
                 }
             },
         }),
@@ -62,11 +63,12 @@ export const authOptions: NextAuthOptions = {
             await dbConnection();
         
             let dbUser = await User.findOne({ email: user.email });
-        
+            
             if (!dbUser) {
                 dbUser = await User.create({
                     name: user.name,
                     email: user.email,
+                    username: user.email?.split("@")[0],
                     image: user.image,
                     role: 'user',
                 });
@@ -76,6 +78,7 @@ export const authOptions: NextAuthOptions = {
         
             user.id = dbUser._id.toString();
             user.role = dbUser.role;
+            user.username = dbUser.username;
         
             return true;
         },
@@ -86,6 +89,7 @@ export const authOptions: NextAuthOptions = {
                 token.email = user.email
                 token.image = user.image
                 token.role = user.role
+                token.username = user.username
             }
             return token
           },
@@ -97,6 +101,7 @@ export const authOptions: NextAuthOptions = {
                 session.user.email = token.email
                 session.user.image = token.image
                 session.user.role = token.role
+                session.user.username = token.username
             }
             return session
         }          

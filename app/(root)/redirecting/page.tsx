@@ -15,11 +15,11 @@ const Redirecting = () => {
         </div>
     }
 
-    if(status === 'authenticated' && session.user.role === 'user'){
-        router.push('/user/discovery')
+    if(session?.user.role === 'user'){
+        router.push('/feed')
     }
 
-    if(status === 'authenticated' && session.user.role === 'admin'){
+    if(session?.user.role === 'admin'){
         router.push('/dashboard')
     }
 

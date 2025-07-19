@@ -15,7 +15,6 @@ import { Label } from "./ui/label"
 import { PasswordInput } from "./ui/password-input"
 import { FormEvent, useEffect, useState } from "react"
 import { Loader } from "lucide-react"
-import { toast } from "sonner"
 import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 
@@ -76,7 +75,6 @@ export function LoginForm() {
                 if(result.error === 'CredentialsSignin'){
                     setError('Invalid email or password.');
                 }
-                toast.error("Login failed: " + result.error);
             } else {
                 router.push("/redirecting"); 
             }
