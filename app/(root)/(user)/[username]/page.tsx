@@ -18,7 +18,6 @@ export default async function Page({ params }: { params: Promise<{ username: str
     const user = await User.findOne({ username})
     const isCurrentUser = session?.user.username === username
 
-
     if(!user){
         return notFound();
     }
