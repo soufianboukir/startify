@@ -31,7 +31,7 @@ export function ProfileMenu({ session }: { session: Session }) {
             </DropdownMenuGroup>
             
             <DropdownMenuGroup>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer">
                     <Link href={`/${session.user.username}`}>
                         My profile
                     </Link>
@@ -39,7 +39,7 @@ export function ProfileMenu({ session }: { session: Session }) {
                 <DropdownMenuItem>
                     Saved ideas
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" asChild>
                     <Link href={`/settings`}>
                         Account settings
                     </Link>
@@ -50,7 +50,7 @@ export function ProfileMenu({ session }: { session: Session }) {
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
                 <Link href={'https://github.com/soufianboukir/startify'} target="_blank">
                     Github
                 </Link>
@@ -58,7 +58,7 @@ export function ProfileMenu({ session }: { session: Session }) {
             <DropdownMenuItem>Support</DropdownMenuItem>
             <DropdownMenuItem disabled>API</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut()}>
+            <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
                 Log out
             </DropdownMenuItem>
         </DropdownMenuContent>

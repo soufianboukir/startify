@@ -6,21 +6,72 @@ import { Button } from '../ui/button'
 import { Session } from 'next-auth'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { Copy, CopyCheck } from 'lucide-react'
+import { Copy, CopyCheck, Loader } from 'lucide-react'
 import { toast } from 'sonner'
+import axios, { AxiosError } from 'axios'
+import { api } from '@/config/api'
+import { useSession } from 'next-auth/react'
 
 export const OtherDetails = ({ session }: { session: Session }) => {
 
+    const { update } = useSession()
     const [website,setWebsite] = useState(session.user.website || '')
     const [headLine,setHeadLine] = useState(session.user.headLine || '')
     const [bio,setBio] = useState(session.user.bio || '')
     const [copied,setCopied] = useState(false)
+    const [loading,setLoading] = useState(false)
+    const [success,setSuccess] = useState(false)
+    const [errors,setErrors] = useState({
+        website: '',
+        headLine: '',
+        bio: '',
+        general: ''
+    })
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(session.user.headLine!)
         toast.success('Copied to clipboard')
         setCopied(true)
     }
+
+    const handleSubmit = async () =>{
+        setErrors({website:'', headLine:'', bio:'', general:''})
+        setSuccess(false)
+        if(!website){
+            setErrors(prev => ({ ...prev, website: 'Try to change here' }))
+            return
+        }
+        if (!headLine) {
+            setErrors(prev => ({ ...prev, headLine: 'Try to change here' }))
+            return
+        }
+        if (!bio) {
+            setErrors(prev => ({ ...prev, bio: 'Try to change here' }))
+            return
+        }
+
+        try{
+            setLoading(true)
+            const res = await api.put(`/user/settings/update-details`,{website,headLine,bio})
+            if(res.status === 200){
+                setSuccess(true)
+                await update()
+            }
+        }catch(err){
+            if (axios.isAxiosError(err)) {
+                const axiosError = err as AxiosError<{ message: string }>;
+            
+                if (axiosError.response?.data?.message) {
+                    setErrors({general: axiosError.response.data.message, website:'', headLine:'', bio:''});
+                } else {
+                    setErrors({general: 'An error occured. please try again', website:'', headLine:'', bio:''});
+                }
+            }
+        }finally{
+            setLoading(false)
+        }
+    }
+    
 
     useEffect(() =>{
         setTimeout(() => {
@@ -38,9 +89,25 @@ export const OtherDetails = ({ session }: { session: Session }) => {
                     </p>
 
                     <div className="flex flex-col gap-4 rounded-md overflow-hidden w-[100%]">
-                        <Input type='text' value={website} placeholder='www.yourwesbite.com' onChange={(e) => setWebsite(e.target.value)}/>
-                        <Input type='text' value={headLine} placeholder='eg., Developer & co-founder' onChange={(e) => setHeadLine(e.target.value)}/>
-                        <Textarea className='w-[100%]' value={bio} placeholder='long description about you..' onChange={(e) => setBio(e.target.value)}/>
+                        <div>
+                            <Input type='text' value={website} placeholder='www.yourwesbite.com' onChange={(e) => setWebsite(e.target.value)}/>
+                            {errors.website && <p className='text-red-500 text-sm'>{errors.website}</p>}
+                        </div>
+                        <div>
+                            <Input type='text' value={headLine} placeholder='eg., Developer & co-founder' onChange={(e) => setHeadLine(e.target.value)}/>
+                            {errors.headLine && <p className='text-red-500 text-sm'>{errors.headLine}</p>}
+                        </div>
+                        <div>
+                            <Textarea className='w-[100%]' value={bio} placeholder='long description about you..' onChange={(e) => setBio(e.target.value)}/>
+                            {errors.bio && <p className='text-red-500 text-sm'>{errors.bio}</p>}
+                        </div>
+
+                        {
+                            errors.general && <p className='text-red-500 text-sm'>{errors.general}</p>
+                        }
+                        {
+                            success && <p className='text-green-600 text-sm'>Your data has been updated successfully</p>
+                        }
 
                         <div className='flex flex-col items-start justify-start gap-1 w-full md:w-[40%]'>
                             <span className='dark:text-white/50 text-black/50 text-sm text-left'>
@@ -74,8 +141,14 @@ export const OtherDetails = ({ session }: { session: Session }) => {
 
             <div className='border-t mt-2 md:px-10 px-5 flex justify-between py-3 items-center'>
                 <p className='text-sm dark:text-white/50 text-black/50'>Please use 48 characters at maximum.</p>
-                <Button>
-                    Save
+                <Button onClick={handleSubmit} disabled={loading}>
+                    {
+                        loading ? 
+                            <>
+                                <Loader className='w-4 h-4 animate-spin' /> saving
+                            </>
+                        :"Save"
+                    }
                 </Button>
             </div>
         </div>

@@ -2,7 +2,7 @@ import { authOptions } from '@/lib/auth'
 import User from '@/models/user'
 import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
-export async function POST(req: NextRequest) {
+export async function PUT(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions)
 

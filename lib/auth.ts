@@ -88,7 +88,7 @@ export const authOptions: NextAuthOptions = {
         
             return true;
         },
-        async jwt({ token, user })  {
+        async jwt({ token, user, trigger })  {
             if (user) {
                 token.id = user.id
                 token.name = user.name
@@ -99,6 +99,23 @@ export const authOptions: NextAuthOptions = {
                 token.headLine = user.headLine
                 token.bio = user.bio
                 token.website = user.website
+            }
+            if (trigger === "update" || token.email) {
+                await dbConnection();
+                const dbUser = await User.findOne({ email: token.email });
+        
+                if (dbUser) {
+        
+                    token.id = dbUser._id.toString();
+                    token.name = dbUser.name
+                    token.email = dbUser.email
+                    token.image = dbUser.image
+                    token.role = dbUser.role
+                    token.username = dbUser.username
+                    token.headLine = dbUser.headLine
+                    token.bio = dbUser.bio
+                    token.website = dbUser.website
+                }
             }
             return token
           },

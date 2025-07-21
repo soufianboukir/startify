@@ -7,6 +7,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { Bell, Mail, PlusSquare } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const Layout = () => {
@@ -40,6 +41,30 @@ const Layout = () => {
     )
 }
 
+const Footer = () =>{
+    return (
+        <div className='bg-background py-8 w-full border-t border-muted/90'>
+            <div className='flex justify-between text-white/50 text-sm md:w-[70%] mx-auto w-[90%] items-center'>
+                <div className='flex items-center gap-3'>
+                    <Image src={'/icons/startify-logo.png'} width={25} height={25} alt='startify-logo'/>
+                    <Link href={'/'} className='hover:text-white duration-200'>Home</Link>
+                    <Link href={'/'} className='hover:text-white duration-200'>Docs</Link>
+                    <Link href={'/'} className='hover:text-white duration-200'>Developer</Link>
+                    <Link href={'/'} className='hover:text-white duration-200'>Privacy policy</Link>
+                    <Link href={'/'} className='hover:text-white duration-200'>Terms of service</Link>
+                    <Link href={'/'} className='hover:text-white duration-200'>Contact</Link>
+                </div>
+
+                <div>
+                    <span>© 2025, Startify Inc.</span>
+                </div>
+            </div>
+
+            
+        </div>  
+    )
+}
+
 export default function RootLayout({
         children,
     }: Readonly<{
@@ -47,10 +72,12 @@ export default function RootLayout({
     }>) {
         return (
         <html lang="en">
-            <body
-            >
+            <body className="min-h-screen flex flex-col">
                 <Layout />
-                {children}
+                <main className="flex-1">
+                    {children}
+                </main>
+                <Footer />
             </body>
         </html>
     );
