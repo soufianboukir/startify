@@ -40,7 +40,9 @@ export function ProfileMenu({ session }: { session: Session }) {
                     Saved ideas
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    Account settings
+                    <Link href={`/settings`}>
+                        Account settings
+                    </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                     Keyboard shortcuts

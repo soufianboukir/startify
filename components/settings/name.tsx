@@ -1,16 +1,19 @@
+'use client'
+
 import { Session } from 'next-auth'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 
 export const ModifyName = ({session}: {session: Session}) => {
+    const [name,setName] = useState<string>(session.user.name || '')
     return (
     <div className='bg-muted/20 rounded-md pt-4 border'>
         <div className='flex justify-between items-center px-5 md:px-10'>
             <div>
                 <h1 className='text-2xl font-semibold mb-3'>Display name</h1>
                 <p className='text-sm mb-3'>Please enter your full name, or a display name you are comfortable with. </p>
-                <Input type='text' value={session.user.name!} className='mb-3'/>
+                <Input type='text' value={name} className='mb-3' onChange={(e) => setName(e.target.value)}/>
             </div>
         </div>
 

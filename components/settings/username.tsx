@@ -1,9 +1,12 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { Session } from 'next-auth'
 import { Input } from '../ui/input'
 
 export const ModifyUsername = ({ session }: { session: Session }) => {
+    const [username,setUsername] = useState(session.user.username || '')
     return (
         <div className='bg-muted/20 rounded-md pt-4 border'>
             <div className='flex justify-between items-center px-5 md:px-10'>
@@ -18,8 +21,9 @@ export const ModifyUsername = ({ session }: { session: Session }) => {
                             startify.vercel.three.app.com/
                         </span>
                         <Input
+                            onChange={(e) => setUsername(e.target.value)}
                             type="text"
-                            value={session.user.username!}
+                            value={username}
                             className="flex-1 px-3 py-2 bg-white text-sm focus:outline-none rounded-bl-none rounded-tl-none"
                             placeholder="Enter your username"
                         />

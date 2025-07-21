@@ -1,6 +1,8 @@
 import { ModifyAvatar } from '@/components/settings/avatar'
+import { DeleteAccount } from '@/components/settings/delete-account'
 import { OtherDetails } from '@/components/settings/headLine-bio-website'
 import { ModifyName } from '@/components/settings/name'
+import { PasswordR } from '@/components/settings/password-r'
 import { ModifyUsername } from '@/components/settings/username'
 import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
@@ -20,6 +22,9 @@ export default async function Page () {
                 <ModifyName session={session}/>
                 <ModifyUsername session={session}/>
                 <OtherDetails session={session}/>
+                <PasswordR />
+                <DeleteAccount />
+                <br />
             </div>
         </div>
     )

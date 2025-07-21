@@ -1,16 +1,33 @@
-import React from 'react'
+'use client'
+
+
+import React, { useEffect, useState } from 'react'
 import { Button } from '../ui/button'
 import { Session } from 'next-auth'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { Copy } from 'lucide-react'
+import { Copy, CopyCheck } from 'lucide-react'
 import { toast } from 'sonner'
 
 export const OtherDetails = ({ session }: { session: Session }) => {
+
+    const [website,setWebsite] = useState(session.user.website || '')
+    const [headLine,setHeadLine] = useState(session.user.headLine || '')
+    const [bio,setBio] = useState(session.user.bio || '')
+    const [copied,setCopied] = useState(false)
+
     const copyToClipboard = () => {
         navigator.clipboard.writeText(session.user.headLine!)
         toast.success('Copied to clipboard')
+        setCopied(true)
     }
+
+    useEffect(() =>{
+        setTimeout(() => {
+            setCopied(false)
+        }, 2000);
+    },[copied])
+
     return (
         <div className='bg-muted/20 rounded-md pt-4 border'>
             <div className='flex justify-between items-center px-5 md:px-10'>
@@ -21,9 +38,9 @@ export const OtherDetails = ({ session }: { session: Session }) => {
                     </p>
 
                     <div className="flex flex-col gap-4 rounded-md overflow-hidden w-[100%]">
-                        <Input type='text' value={session.user.website!} placeholder='www.yourwesbite.com' />
-                        <Input type='text' value={session.user.headLine!} placeholder='eg., Developer & co-founder'/>
-                        <Textarea className='w-[100%]' placeholder='long description about you..'/>
+                        <Input type='text' value={website} placeholder='www.yourwesbite.com' onChange={(e) => setWebsite(e.target.value)}/>
+                        <Input type='text' value={headLine} placeholder='eg., Developer & co-founder' onChange={(e) => setHeadLine(e.target.value)}/>
+                        <Textarea className='w-[100%]' value={bio} placeholder='long description about you..' onChange={(e) => setBio(e.target.value)}/>
 
                         <div className='flex flex-col items-start justify-start gap-1 w-full md:w-[40%]'>
                             <span className='dark:text-white/50 text-black/50 text-sm text-left'>
@@ -43,7 +60,11 @@ export const OtherDetails = ({ session }: { session: Session }) => {
                                     type='button'
                                     className='absolute right-2 top-1/2 -translate-y-1/2 dark:text-white/50 text-black/50 hover:text-black/40 dark:hover:text-white/40 cursor-pointer transition'
                                 >
-                                    <Copy className='w-4 h-4' />
+                                    {
+                                        copied ?
+                                        <CopyCheck className='text-green-700 w-4 h-4'/>
+                                        : <Copy className='w-4 h-4' />
+                                    }
                                 </button>
                             </div>
                         </div>

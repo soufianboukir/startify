@@ -14,7 +14,7 @@ const Layout = () => {
     if(status === 'loading') return null
 
     return (
-        <div className='fixed py-3 items-center border border-b dark:border-muted/60 border-b-gray-200 w-[100%] md:px-16 px-6 flex justify-between z-10 bg-white dark:bg-muted/10'>
+        <div className='fixed py-3 items-center border border-b dark:border-muted/60 border-b-gray-200 w-[100%] md:px-16 px-6 flex justify-between z-10 bg-white dark:bg-background'>
             <div className='flex gap-2 items-center cursor-pointer'>
                 <Image src={'/icons/startify-logo.png'} width={30} height={30} alt='Startify logo' className='rounded-xs'/>
                 <div className='hidden flex-col md:flex'>
