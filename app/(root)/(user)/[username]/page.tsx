@@ -11,14 +11,15 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
-export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ username: string }> }): Promise<Metadata> {
     await dbConnection()
-    const user = await User.findOne({ username: params.username })
+    const { username } = await params
+    const user = await User.findOne({ username })
   
     if (!user) {
       return {
         title: "User Not Found",
-        description: `No user with username "${params.username}" exists.`,
+        description: `No user with username "${username}" exists.`,
       }
     }
   
