@@ -2,13 +2,46 @@ import { EmptyState } from '@/components/empty-state'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { dbConnection } from '@/config/db'
 import { authOptions } from '@/lib/auth'
+import Idea from '@/models/idea'
 import User from '@/models/user'
 import { Cake, SquareArrowUpRight } from 'lucide-react'
+import { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
+export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
+    await dbConnection()
+    const user = await User.findOne({ username: params.username })
+  
+    if (!user) {
+      return {
+        title: "User Not Found",
+        description: `No user with username "${params.username}" exists.`,
+      }
+    }
+  
+    const ideasCount = await Idea.countDocuments({ author: user._id })
+  
+    return {
+        title: `${user.username} (${user.name}) - Ideas (${ideasCount})`,
+        description: `Explore ${user.name}'s startup ideas. Total ideas shared: ${ideasCount}.`,
+        openGraph: {
+            title: `${user.name} (@${user.username}) - Ideas (${ideasCount})`,
+            description: `Explore ${user.name}'s SaaS startup ideas.`,
+            url: `${process.env.NEXT_PUBLIC_APP_URL}/${user.username}`,
+            siteName: "Startify Platform",
+            locale: "en-US",
+            type: "profile",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: `${user.name} (@${user.username})`,
+            description: `Discover startup ideas shared by ${user.name}.`,
+        },
+    }
+}
 
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {
 
@@ -16,6 +49,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
     const session = await getServerSession(authOptions)
     await dbConnection()
     const user = await User.findOne({ username})
+    // const ideas = await Idea.find({author: user._id}).populate('author', 'name username image')    
 
     if(!user){
         return notFound();
