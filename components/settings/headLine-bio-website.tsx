@@ -111,7 +111,7 @@ export const OtherDetails = ({ session }: { session: Session }) => {
 
                         <div className='flex flex-col items-start justify-start gap-1 w-full md:w-[40%]'>
                             <span className='dark:text-white/50 text-black/50 text-sm text-left'>
-                                User ID used when interacting with the Vercel API.
+                                User ID used when interacting with the Startify API.
                             </span>
 
                             <div className='relative w-full'>

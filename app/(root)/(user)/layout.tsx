@@ -4,7 +4,8 @@
 import { ProfileMenu } from '@/components/dropdown-menu'
 import { SearchInput } from '@/components/search-input'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { Bell, Mail, PlusSquare } from 'lucide-react'
+import { ShareIdea } from '@/components/share-idea'
+import { Bell, Mail } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -31,7 +32,7 @@ const Layout = () => {
             <div className='flex gap-4 items-center'>
                 <Mail className='w-5 h-5 hidden md:block'/>
                 <Bell className='w-5 h-5 hidden md:block'/>
-                <PlusSquare className='w-5 h-5 hidden md:block'/>
+                <ShareIdea />
                 {
                     session && <ProfileMenu session={session}/>
                 }
@@ -43,24 +44,22 @@ const Layout = () => {
 
 const Footer = () =>{
     return (
-        <div className='bg-background py-8 w-full border-t border-muted/90'>
-            <div className='flex justify-between text-white/50 text-sm md:w-[70%] mx-auto w-[90%] items-center'>
-                <div className='flex items-center gap-3'>
+        <div className='bg-background py-8 w-full border-t border-gray-200 dark:border-muted/90'>
+            <div className='flex md:flex-row gap-10 md:gap-0 flex-col justify-between dark:text-white/50 text-black/50 text-sm md:w-[80%] lg:w-[70%] mx-auto w-[90%] items-center'>
+                <div className='flex flex-col md:flex-row items-center gap-3'>
                     <Image src={'/icons/startify-logo.png'} width={25} height={25} alt='startify-logo'/>
-                    <Link href={'/'} className='hover:text-white duration-200'>Home</Link>
-                    <Link href={'/'} className='hover:text-white duration-200'>Docs</Link>
-                    <Link href={'/'} className='hover:text-white duration-200'>Developer</Link>
-                    <Link href={'/'} className='hover:text-white duration-200'>Privacy policy</Link>
-                    <Link href={'/'} className='hover:text-white duration-200'>Terms of service</Link>
-                    <Link href={'/'} className='hover:text-white duration-200'>Contact</Link>
+                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Home</Link>
+                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Docs</Link>
+                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Developer</Link>
+                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Privacy policy</Link>
+                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Terms of service</Link>
+                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Contact</Link>
                 </div>
 
                 <div>
                     <span>© 2025, Startify Inc.</span>
                 </div>
             </div>
-
-            
         </div>  
     )
 }

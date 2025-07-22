@@ -12,7 +12,7 @@ export const DeleteAccount = () => {
                 </div>
             </div>
 
-            <div className='border-t mt-2 md:px-10 px-5 flex justify-end py-3 items-center bg-red-900/30'>
+            <div className='border-t mt-2 md:px-10 px-5 flex justify-end py-3 items-center bg-red-300/40 dark:bg-red-900/30'>
                 <Button className='bg-red-500 text-white cursor-pointer hover:bg-red-400'>
                     Delete personal account
                 </Button>
