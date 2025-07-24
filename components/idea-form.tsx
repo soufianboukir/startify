@@ -21,7 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { api } from "@/config/api"
 import { toast } from "sonner"
 
-export function ShareIdea() {
+export function IdeaForm() {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [problem, setProblem] = useState("")
