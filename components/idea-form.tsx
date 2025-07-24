@@ -23,6 +23,10 @@ import { toast } from "sonner"
 import { Idea } from "@/interfaces/idea"
 
 export function IdeaForm({ idea }: { idea?: Idea}) {
+    
+
+    console.log(idea);
+    
     const [title, setTitle] = useState(idea?.title || "")
     const [description, setDescription] = useState(idea?.description || "")
     const [problem, setProblem] = useState(idea?.problem || "")
@@ -81,15 +85,15 @@ export function IdeaForm({ idea }: { idea?: Idea}) {
         }
     }
 
-    useEffect(() => {
-        setDisableSubmit(
-            !title.trim() ||
-            !description.trim() ||
-            !problem.trim() ||
-            tags.length === 0 ||
-            !category.trim()
-        )
-    }, [title, description, problem, tags, category])
+    // useEffect(() => {
+    //     setDisableSubmit(
+    //         !title.trim() ||
+    //         !description.trim() ||
+    //         !problem.trim() ||
+    //         tags.length === 0 ||
+    //         !category.trim()
+    //     )
+    // }, [title, description, problem, tags, category])
       
 
     return (
@@ -221,7 +225,7 @@ export function IdeaForm({ idea }: { idea?: Idea}) {
                                 Cancel
                             </Button>
                         </DialogClose>
-                        <Button type="submit" onClick={handleSubmit} disabled={disableSubmit || loading}>
+                        <Button type="submit" disabled={disableSubmit || loading}>
                             {
                                 loading?
                                     <><Loader className="w-4 h-4 animate-spin"/> posting</>

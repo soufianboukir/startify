@@ -20,13 +20,6 @@ export function IdeaMenu({ isCurrentUser, idea }: { isCurrentUser: boolean, idea
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start">
         <DropdownMenuGroup>
-          {
-            isCurrentUser && (
-              <DropdownMenuItem className="cursor-pointer" asChild>
-                <IdeaForm idea={idea}/>
-              </DropdownMenuItem>
-            )
-          }
           <DropdownMenuItem className="cursor-pointer">
             <Save className="w-6 h-6"/>
             Save
@@ -35,6 +28,13 @@ export function IdeaMenu({ isCurrentUser, idea }: { isCurrentUser: boolean, idea
             <Flag className="w-6 h-6"/>
             Report
           </DropdownMenuItem>
+          {
+            isCurrentUser && (
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <IdeaForm idea={idea}/>
+              </DropdownMenuItem>
+            )
+          }
           {
             isCurrentUser && (
               <DropdownMenuItem className="text-red-500 hover:text-red-600 cursor-pointer" asChild>
