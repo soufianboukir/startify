@@ -15,23 +15,23 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Loader, Plus, PlusSquare, X } from "lucide-react"
+import { Edit, Loader, Plus, PlusSquare, X } from "lucide-react"
 import { Switch } from "./ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { api } from "@/config/api"
 import { toast } from "sonner"
+import { Idea } from "@/interfaces/idea"
 
-export function IdeaForm() {
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
-    const [problem, setProblem] = useState("")
-    const [tags, setTags] = useState<string[]>([])
+export function IdeaForm({ idea }: { idea?: Idea}) {
+    const [title, setTitle] = useState(idea?.title || "")
+    const [description, setDescription] = useState(idea?.description || "")
+    const [problem, setProblem] = useState(idea?.problem || "")
+    const [tags, setTags] = useState<string[]>(idea?.tags || [])
     const [tagInput, setTagInput] = useState("")
-    const [isOpenToCollab,setIsOpenToCollab] = useState(false)
-    const [category,setCategory] = useState('')
+    const [isOpenToCollab,setIsOpenToCollab] = useState(idea?.isOpenToCollab || false)
+    const [category,setCategory] = useState(idea?.category || '')
     const [disableSubmit,setDisableSubmit] = useState(true)
     const [open,setOpen] = useState(false)
-
     const [loading,setLoading] = useState(false)
 
     const addTag = () => {
@@ -48,18 +48,31 @@ export function IdeaForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        const idea = { title, description, problem, tags, isOpenToCollab, category }
+        const ideaData = { title, description, problem, tags, isOpenToCollab, category }
         setLoading(true)
         try{
-            const response = await api.post(`/ideas`,{idea})
-            if(response.status === 200){
-                toast.success("Your idea has been shared")
-                setTitle('')
-                setDescription('')
-                setProblem('')
-                setTags([])
-                setCategory('')
-                setOpen(false)
+            if( idea?._id ){
+                const response = await api.put(`/ideas`,{ideaData})
+                if(response.status === 200){
+                    toast.success("Your idea data has been updated")
+                    setTitle('')
+                    setDescription('')
+                    setProblem('')
+                    setTags([])
+                    setCategory('')
+                    setOpen(false)
+                }
+            }else{
+                const response = await api.post(`/ideas`,{ideaData})
+                if(response.status === 200){
+                    toast.success("Your idea has been shared")
+                    setTitle('')
+                    setDescription('')
+                    setProblem('')
+                    setTags([])
+                    setCategory('')
+                    setOpen(false)
+                }
             }
         }catch{
             toast.error("An error occured. try again")
@@ -82,7 +95,14 @@ export function IdeaForm() {
     return (
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
             <DialogTrigger asChild>
-                <PlusSquare className="w-5 h-5 hidden md:block cursor-pointer" />
+                {
+                    idea?
+                    <button className="flex items-center gap-2 px-2 py-1 cursor-pointer">
+                        <Edit className="w-4 h-4" />
+                        Edit
+                    </button>
+                    : <PlusSquare className="w-5 h-5 hidden md:block cursor-pointer" />
+                }
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
                 <form onSubmit={handleSubmit}>
