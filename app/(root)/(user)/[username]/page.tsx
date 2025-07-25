@@ -108,8 +108,8 @@ export default async function Page({ params }: { params: Promise<{ username: str
                                                 <div className='flex justify-between'>
                                                     <div className='flex gap-2 items-center'>
                                                         <Avatar className="cursor-pointer w-8 h-8">
-                                                            <AvatarImage src={user.image} />
-                                                            <AvatarFallback>{session?.user.name?.charAt(0)}</AvatarFallback>
+                                                            <AvatarImage src={idea.author.image} />
+                                                            <AvatarFallback>{idea.author.name?.charAt(0)}</AvatarFallback>
                                                         </Avatar>
                                                         <div className='flex flex-col'>
                                                             <Link className='font-medium text-zinc-900 dark:text-zinc-50 duration-100' href={`/${idea.author.username}`}>{idea.author.name}</Link>
@@ -124,13 +124,13 @@ export default async function Page({ params }: { params: Promise<{ username: str
                                                 </div>
 
                                                 <div className='mt-3'>
-                                                    <p className='text-lg font-semibold mb-1 hover:underline duration-200 cursor-pointer'>
+                                                    <Link className='text-lg font-semibold mb-1 hover:underline duration-200 cursor-pointer' href={`/idea/${idea._id}`}>
                                                         {idea.title}
-                                                    </p>
+                                                    </Link>
 
-                                                    <span className="text-sm text-black/60 dark:text-white/70 line-clamp-5 block mb-1">
+                                                    <p className="text-sm text-black/60 dark:text-white/70 mb-1">
                                                         {idea.description}
-                                                    </span>
+                                                    </p>
 
                                                     {
                                                         idea.isOpenToCollab ?

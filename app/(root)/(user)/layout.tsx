@@ -71,11 +71,11 @@ export default function RootLayout({
     }>) {
         return (
         <html lang="en">
-            <body className="min-h-screen flex flex-col">
+            <body className="h-[100vh] flex flex-col">
                 <Layout />
-                <main className="flex-1">
-                    {children}
-                </main>
+                    <main className="flex-1">
+                        {children}
+                    </main>
                 <Footer />
             </body>
         </html>
