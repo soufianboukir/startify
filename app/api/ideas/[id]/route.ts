@@ -6,7 +6,7 @@ import { dbConnection } from '@/config/db'
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions)
@@ -15,8 +15,8 @@ export async function DELETE(
         }
 
         await dbConnection()
-
-        const idea = await Idea.findById(params.id)
+        const { id } = await params
+        const idea = await Idea.findById(id)
 
         if (!idea) {
             return NextResponse.json({ message: 'Idea not found' }, { status: 404 })
@@ -26,7 +26,7 @@ export async function DELETE(
             return NextResponse.json({ message: 'Forbidden' }, { status: 403 })
         }
 
-        await Idea.findByIdAndDelete(params.id)
+        await Idea.findByIdAndDelete(id)
 
         return NextResponse.json({ message: 'Idea deleted successfully' }, { status: 200 })
     } catch {

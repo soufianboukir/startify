@@ -1,25 +1,25 @@
-import mongoose, { Document, Schema, model, Types } from 'mongoose'
+import mongoose, { Document, Schema, model, Types } from "mongoose";
 
 export interface IComment extends Document {
-    content: string
-    author: Types.ObjectId
-    idea: Types.ObjectId
-    parent?: Types.ObjectId
-    likes?: Types.ObjectId[]
-    createdAt: Date
-    updatedAt: Date
+  content: string;
+  author: Types.ObjectId;
+  idea: Types.ObjectId;
+  likes?: Types.ObjectId[];
+  replies: IComment[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const commentSchema = new Schema<IComment>(
-    {
-        content: { type: String, required: true, trim: true },
-        author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-        idea: { type: Schema.Types.ObjectId, ref: 'Idea', required: true },
-        parent: { type: Schema.Types.ObjectId, ref: 'Comment', default: null },
-        likes: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
-    },
-    { timestamps: true }
-)
+  {
+    content: { type: String, required: true, trim: true },
+    author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    idea: { type: Schema.Types.ObjectId, ref: 'Idea', required: true },
+    likes: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
+    replies: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+  },
+  { timestamps: true }
+);
 
-const Comment = mongoose.models.Comment || model<IComment>('Comment', commentSchema)
-export default Comment
+const Comment = mongoose.models.Comment || model<IComment>('Comment', commentSchema);
+export default Comment;

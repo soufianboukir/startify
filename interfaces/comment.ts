@@ -3,8 +3,8 @@ import { User } from "./user"
 
 export interface Comment {
     _id?: string
-    content: string
-    author: User
+    content?: string
+    author?: User
     idea?: Idea
     parent?: Comment
     likes?: User[]

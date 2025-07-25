@@ -14,7 +14,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params:Promise<{ id: string }> }): Promise<Metadata> {
     await dbConnection()
 
     const { id } = await params

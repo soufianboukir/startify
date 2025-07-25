@@ -3,37 +3,39 @@
 import React, { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Comment } from '@/interfaces/comment'
 import { api } from '@/config/api'
 import { Loader } from 'lucide-react'
 import { toast } from 'sonner'
 import { EmptyState } from './empty-state'
 import { Session } from 'next-auth'
-import { formatDistanceToNow } from 'date-fns'
+import { CommentItem } from './commentItem'
 
 export const Comments = ({ ideaId, session }: { ideaId: string, session: Session }) => {
 
     const [comments,setComments] = useState<Comment[]>([])
     const [loading,setLoading] = useState(true)
     const [page,setPage] = useState(1)
-    const [comment,setComment] = useState('')
+    const [commentInput,setCommentInput] = useState('')
     const [posting,setPosting] = useState(false)
     const [totalComments,setTotalComments] = useState(0)
-    const disableBtn = comment === ''
+    const disableBtn = commentInput === ''
+    const [moreLoading,setMoreLoading] = useState(false)
+    const [replyingTo,setReplyingTo] = useState<{username?: string, commentId: string}>({username: '', commentId: ''})
+    const [replyComment,setReplyComment] = useState('')
+    const disableReply = replyComment === ''
+    const [replying,setReplying] = useState(false)
+
+    
 
     useEffect(() => {
         const getComments = async () => {
             try {
                 setLoading(true)
-                const res = await api.get(`/comments/${ideaId}?page=${page}`)
+                const res = await api.get(`/comments/${ideaId}`)
                 if (res.status === 200) {
-                    const newComments = res.data.comments
                     setTotalComments(res.data.total)
-    
-                    setComments(prev =>
-                        page === 1 ? newComments : [...prev, ...newComments]
-                    )
+                    setComments(res.data.comments)
                 }
             } catch {
                 // setError("An error occurred")
@@ -45,20 +47,34 @@ export const Comments = ({ ideaId, session }: { ideaId: string, session: Session
         if (ideaId) {
             getComments()
         }
-    }, [page, ideaId])
+    }, [ideaId])
+
+    useEffect(() =>{
+        const getMore = async () =>{
+            if( page === 1) return 
+            setMoreLoading(true)
+            const res = await api.get(`/comments/${ideaId}?page=${page}`)
+            if(res.status === 200){
+                const newComments = res.data.comments
+                setComments(prev =>
+                    page === 1 ? newComments : [...prev, ...newComments]
+                )
+            }
+            setMoreLoading(false)
+        }
+        getMore()
+    },[page,ideaId])
 
 
     const postComment = async () =>{
-        if( comment === '') return
+        if( commentInput === '') return
         try{
             setPosting(true)
-            const res = await api.post(`/comments`,{content: comment, ideaId})
+            const res = await api.post(`/comments`,{content: commentInput, ideaId})
             if(res.status === 200){
                 toast.success('Comment posted successfully')
-                setComment('')
-                setComments([{content:comment, author: {name: session.user.name!,
-                    username: session.user.username,
-                    image: session.user.image!}, createdAt: new Date()},...comments])
+                setCommentInput('')                
+                setComments([res.data.comment,...comments])
             }
         }catch{
             toast.error('An error occured. try again')
@@ -66,10 +82,31 @@ export const Comments = ({ ideaId, session }: { ideaId: string, session: Session
             setPosting(false)
         }
     }
+    const replyToComment = async () =>{
+        if( replyComment === '') return
+        try{
+            setReplying(true)
+            console.log(replyingTo);
+            
+            const res = await api.post(`/comments`,{content: replyComment, ideaId, commentId: replyingTo.commentId})
+            if(res.status === 200){
+                toast.success('Replyed successfully')
+                setReplyComment('')
+                setReplyingTo({username: '', commentId: ''})
+                setComments([{content:replyComment, author: {name: session.user.name!,
+                    username: session.user.username,
+                    image: session.user.image!}, createdAt: new Date(), parent: {_id : replyingTo.commentId, createdAt: new Date()}},...comments])
+            }
+        }catch{
+            toast.error('An error occured. try again')
+        }finally{
+            setReplying(false)
+        }
+    }
     return (
         <div>
             <div className="flex gap-2">
-                <Input type="text" placeholder="Post a comment" value={comment} onChange={(e) => setComment(e.target.value)}/>
+                <Input type="text" placeholder="Post a comment" value={commentInput} onChange={(e) => setCommentInput(e.target.value)}/>
                 <Button className="bg-blue-600 hover:bg-blue-700 rounded-full text-white cursor-pointer" disabled={posting || disableBtn} onClick={postComment}>
                     {
                         posting ?
@@ -80,38 +117,28 @@ export const Comments = ({ ideaId, session }: { ideaId: string, session: Session
             </div>
 
             <div className="mt-6 flex flex-col gap-3">
-                    {
-                        comments && comments.length && !loading ? (
-                            comments.map((comment) => (
-                                <div key={comment._id}>
-                                    <div className="flex gap-2 items-center">
-                                        <Avatar className="cursor-pointer w-6 h-6">
-                                            <AvatarImage src={comment.author.image} />
-                                            <AvatarFallback>{comment.author.name?.charAt(0)}</AvatarFallback>
-                                        </Avatar>
-
-                                        <span className="hover:underline duration-100 font-semibold text-sm">{comment.author.username}</span>
-
-                                        <span className="dark:text-white/50 text-black/50 text-[12px]">
-                                            {formatDistanceToNow(comment.createdAt, { addSuffix: true })}
-                                        </span>
-                                    </div>
-                                    <div className="mt-1 ml-8">
-                                        <p className="text-xs dark:text-white/50">{comment.content}</p>
-                                    </div>
-
-                                    <div className='flex gap-4 mt-1'>
-                                        <span className="text-sm ml-8 dark:text-white/50 text-black/50 underline">Like</span>
-                                        <span className="text-sm dark:text-white/50 text-black/50 underline">reply</span>
-                                    </div>
-                                </div>
-                            ))
-                        ) : null
-                    }
+                    {comments && comments.length && !loading ? comments.map((comment) => (
+                        <div key={comment._id}>
+                            <CommentItem 
+                                comment={comment} 
+                                replying={replying} 
+                                replyingTo={replyingTo} 
+                                setReplyingTo={setReplyingTo}
+                                disableReply={disableReply}
+                                replyComment={replyComment}
+                                setReplyComment={setReplyComment}
+                                replyToComment={replyToComment}/>
+                        </div>
+                    )): null}
             </div>
             {
-                totalComments > 10 && !loading && <div className='flex justify-around'>
+                totalComments > 10 && !loading && !moreLoading && comments.length <= totalComments && <div className='flex justify-around'>
                     <span className='my-2 dark:text-white/50 text-black/50 text-sm' onClick={() => setPage(page + 1)}>Load more comments</span>
+                </div>
+            }
+            {
+                moreLoading && <div className='flex justify-around'>
+                    <span className='my-2 dark:text-white/50 text-black/50 text-sm'>Loading...</span>
                 </div>
             }
             {
