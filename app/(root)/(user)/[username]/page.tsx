@@ -8,6 +8,7 @@ import { Idea as IIdea } from '@/interfaces/idea'
 import { authOptions } from '@/lib/auth'
 import Idea from '@/models/idea'
 import User from '@/models/user'
+import { formatDistanceToNow } from 'date-fns'
 import { ArrowDown, ArrowUp, Cake, MessageCircle, SquareArrowUpRight } from 'lucide-react'
 import { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
@@ -104,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                                 {
                                     ideas.map((idea: IIdea) => (
                                         <div key={idea._id}>
-                                            <div className='w-[100%] cursor-pointer md:w-[80%] mx-auto text-left hover:bg-muted/10 duration-200 py-3 rounded-md px-3'>
+                                            <div className='w-[100%] md:w-[80%] mx-auto text-left hover:bg-muted/10 duration-200 py-3 rounded-md px-3'>
                                                 <div className='flex justify-between'>
                                                     <div className='flex gap-2 items-center'>
                                                         <Avatar className="cursor-pointer w-8 h-8">
@@ -164,7 +165,9 @@ export default async function Page({ params }: { params: Promise<{ username: str
                                                     </div>
 
                                                     <div>
-                                                        <span className='text-xs text-black/70 dark:text-white/70'>Posted 20 minutes ago</span>
+                                                        <span className='text-xs text-black/70 dark:text-white/70'>
+                                                            {formatDistanceToNow(idea.createdAt, { addSuffix: true })}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>

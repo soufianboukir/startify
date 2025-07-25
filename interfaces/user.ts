@@ -1,14 +1,11 @@
-export interface User {
-    _id: string
-    name?: string
-    username: string
-    email: string
-    image?: string
-    password?: string 
-    role: 'user' | 'admin'
+export type User = {
+    id?: string;
+    name: string;
+    username: string;
+    image: string;
+    email?: string;
     headLine?: string
     bio?: string
     website?: string
-    createdAt: Date
-    updatedAt: Date
+    role?: 'admin' | 'user';
 }

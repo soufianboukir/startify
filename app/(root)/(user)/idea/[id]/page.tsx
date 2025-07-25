@@ -1,12 +1,12 @@
+import { Comments } from "@/components/comments"
 import { IdeaMenu } from "@/components/idea-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { dbConnection } from "@/config/db"
 import { authOptions } from "@/lib/auth"
 import Idea from "@/models/idea"
+import { formatDistanceToNow } from "date-fns"
 import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react"
 import { Metadata } from "next"
 import { getServerSession } from "next-auth"
@@ -17,7 +17,7 @@ import { notFound } from "next/navigation"
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
     await dbConnection()
 
-    const { id } = params
+    const { id } = await params
     const idea = await Idea.findById(id).populate('author', 'name username image')
 
     if (!idea) {
@@ -125,34 +125,18 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                             </div>
 
                             <div>
-                                <span className='text-xs text-black/70 dark:text-white/70'>Posted 20 minutes ago</span>
+                                <span className='text-xs text-black/70 dark:text-white/70'>
+                                    {formatDistanceToNow(idea.createdAt, { addSuffix: true })}
+                                </span>
                             </div>
                         </div>
                     </div>
                     <hr className='w-[100%] md:w-[80%] mx-auto' />
                 </div>
                 <div className="w-[100%] cursor-pointer md:w-[80%] mx-auto">
-                    <div className="flex gap-2">
-                        <Input type="text" placeholder="Post a comment"/>
-                        <Button className="bg-blue-600 hover:bg-blue-700 rounded-full text-white cursor-pointer">
-                            Post
-                        </Button>
-                    </div>
-
-                    <div className="mt-3">
-                        <div>
-                            <div className="flex gap-2 items-center">
-                                <Avatar className="cursor-pointer w-6 h-6">
-                                    <AvatarImage src={idea.author.image} />
-                                    <AvatarFallback>{idea.author.name?.charAt(0)}</AvatarFallback>
-                                </Avatar>
-
-                                <span className="hover:underline duration-100 font-semibold text-sm">{idea.author.username}</span>
-
-                                <span className="dark:text-white/50 text-black/50 text-[12px]">5 hours ago</span>
-                            </div>
-                        </div>
-                    </div>
+                    {
+                        session && <Comments ideaId={id} session={session}/>
+                    }
                 </div>
             </div>
         </div>
