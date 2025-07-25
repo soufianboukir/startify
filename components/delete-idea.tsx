@@ -46,7 +46,7 @@ export function DeleteIdea({ ideaId }: { ideaId: string }) {
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
             <form>
                 <DialogTrigger asChild>
-                    <button className="flex items-center gap-2 text-red-500 px-2 py-1 cursor-pointer">
+                    <button className="flex items-center gap-2 text-red-500 px-2 py-1 cursor-pointer text-sm">
                         <Trash2 className="w-4 h-4 text-red-500" />
                         Delete
                     </button>

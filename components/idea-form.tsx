@@ -24,9 +24,6 @@ import { Idea } from "@/interfaces/idea"
 
 export function IdeaForm({ idea }: { idea?: Idea}) {
     
-
-    console.log(idea);
-    
     const [title, setTitle] = useState(idea?.title || "")
     const [description, setDescription] = useState(idea?.description || "")
     const [problem, setProblem] = useState(idea?.problem || "")
@@ -55,28 +52,15 @@ export function IdeaForm({ idea }: { idea?: Idea}) {
         const ideaData = { title, description, problem, tags, isOpenToCollab, category }
         setLoading(true)
         try{
-            if( idea?._id ){
-                const response = await api.put(`/ideas`,{ideaData})
-                if(response.status === 200){
-                    toast.success("Your idea data has been updated")
-                    setTitle('')
-                    setDescription('')
-                    setProblem('')
-                    setTags([])
-                    setCategory('')
-                    setOpen(false)
-                }
-            }else{
-                const response = await api.post(`/ideas`,{ideaData})
-                if(response.status === 200){
-                    toast.success("Your idea has been shared")
-                    setTitle('')
-                    setDescription('')
-                    setProblem('')
-                    setTags([])
-                    setCategory('')
-                    setOpen(false)
-                }
+            const response = await api.post(`/ideas`,{ideaData})
+            if(response.status === 200){
+                toast.success("Your idea has been shared")
+                setTitle('')
+                setDescription('')
+                setProblem('')
+                setTags([])
+                setCategory('')
+                setOpen(false)
             }
         }catch{
             toast.error("An error occured. try again")
@@ -85,15 +69,15 @@ export function IdeaForm({ idea }: { idea?: Idea}) {
         }
     }
 
-    // useEffect(() => {
-    //     setDisableSubmit(
-    //         !title.trim() ||
-    //         !description.trim() ||
-    //         !problem.trim() ||
-    //         tags.length === 0 ||
-    //         !category.trim()
-    //     )
-    // }, [title, description, problem, tags, category])
+    useEffect(() => {
+        setDisableSubmit(
+            !title.trim() ||
+            !description.trim() ||
+            !problem.trim() ||
+            tags.length === 0 ||
+            !category.trim()
+        )
+    }, [title, description, problem, tags, category])
       
 
     return (

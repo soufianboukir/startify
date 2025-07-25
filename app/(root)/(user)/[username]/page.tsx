@@ -93,87 +93,89 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         }
                     </div>
 
-                    {ideas.length === 0 ? (
-                        <EmptyState
-                            message="No posts found"
-                            description="Your posts will appear here. Just start posting."
-                        />
-                    ) : (
-                        <div className='flex flex-col gap-3 mt-4'>
-                            {
-                                ideas.map((idea: IIdea) => (
-                                    <div key={idea._id}>
-                                        <div className='w-[100%] cursor-pointer md:w-[80%] mx-auto text-left hover:bg-muted/10 duration-200 py-3 rounded-md px-3'>
-                                            <div className='flex justify-between'>
-                                                <div className='flex gap-2 items-center'>
-                                                    <Avatar className="cursor-pointer w-8 h-8">
-                                                        <AvatarImage src={user.image} />
-                                                        <AvatarFallback>{session?.user.name?.charAt(0)}</AvatarFallback>
-                                                    </Avatar>
-                                                    <div className='flex flex-col'>
-                                                        <Link className='font-medium text-zinc-900 dark:text-zinc-50 duration-100' href={`/${idea.author.username}`}>{idea.author.name}</Link>
-                                                        <span className='text-xs text-zinc-500 dark:text-zinc-400'>@{idea.author.username}</span>
+                    <div>
+                        {ideas.length === 0 ? (
+                            <EmptyState
+                                message="No posts found"
+                                description="Your posts will appear here. Just start posting."
+                            />
+                        ) : (
+                            <div className='flex flex-col gap-3 mt-4'>
+                                {
+                                    ideas.map((idea: IIdea) => (
+                                        <div key={idea._id}>
+                                            <div className='w-[100%] cursor-pointer md:w-[80%] mx-auto text-left hover:bg-muted/10 duration-200 py-3 rounded-md px-3'>
+                                                <div className='flex justify-between'>
+                                                    <div className='flex gap-2 items-center'>
+                                                        <Avatar className="cursor-pointer w-8 h-8">
+                                                            <AvatarImage src={user.image} />
+                                                            <AvatarFallback>{session?.user.name?.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className='flex flex-col'>
+                                                            <Link className='font-medium text-zinc-900 dark:text-zinc-50 duration-100' href={`/${idea.author.username}`}>{idea.author.name}</Link>
+                                                            <span className='text-xs text-zinc-500 dark:text-zinc-400'>@{idea.author.username}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className='flex gap-2 items-center'>
+                                                        <Badge variant="secondary">{idea.category}</Badge>
+                                                        <IdeaMenu isCurrentUser={isCurrentUser} idea={idea} />
                                                     </div>
                                                 </div>
 
-                                                <div className='flex gap-2 items-center'>
-                                                    <Badge variant="secondary">{idea.category}</Badge>
-                                                    <IdeaMenu isCurrentUser={isCurrentUser} idea={idea} />
+                                                <div className='mt-3'>
+                                                    <p className='text-lg font-semibold mb-1 hover:underline duration-200 cursor-pointer'>
+                                                        {idea.title}
+                                                    </p>
+
+                                                    <span className="text-sm text-black/60 dark:text-white/70 line-clamp-5 block mb-1">
+                                                        {idea.description}
+                                                    </span>
+
+                                                    {
+                                                        idea.isOpenToCollab ?
+                                                            <Badge className='bg-green-700 text-white'>Open to collaborators</Badge>
+                                                            : <Badge className='bg-red-700 text-white'>Not open to collaborators</Badge>
+                                                    }
+
+                                                    <span className="text-sm text-red-500 dark:text-red-400 italic line-clamp-2 mt-2">
+                                                        Problem: {idea.problem}
+                                                    </span>
                                                 </div>
-                                            </div>
 
-                                            <div className='mt-3'>
-                                                <p className='text-lg font-semibold mb-1 hover:underline duration-200 cursor-pointer'>
-                                                    {idea.title}
-                                                </p>
+                                                <div className='mt-3 flex justify-between items-center'>
+                                                    <div className='flex gap-3'>
+                                                        <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                                <div className='dark:bg-muted/90 bg-gray-100 flex gap-1 rounded-full px-2 py-1 dark:text-white text-black items-center'>
+                                                                    <ArrowUp className='stroke-[3] duration-200 hover:bg-blue-800 rounded-full p-1 hover:text-white' />
+                                                                    <span className='text-xs font-semibold'>20</span>
+                                                                    <ArrowDown className='stroke-[3] duration-200 hover:bg-orange-800 rounded-full p-1 hover:text-white' />
+                                                                </div>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent>
+                                                                <p>Upvote if you find this idea valuable. Downvote if you think it{"'"}s not helpful.</p>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                        <div className='dark:bg-muted/90 bg-gray-100 flex gap-1 rounded-full px-3 py-1 dark:text-white text-black items-center duration-200 dark:hover:bg-muted/60 hover:bg-gray-200'>
+                                                            <MessageCircle className='w-4 h-4' />
+                                                            <span className='text-xs font-semibold'>20</span>
+                                                        </div>
+                                                    </div>
 
-                                                <span className="text-sm text-black/60 dark:text-white/70 line-clamp-5 block mb-1">
-                                                    {idea.description}
-                                                </span>
-
-                                                {
-                                                    idea.isOpenToCollab ?
-                                                        <Badge className='bg-green-700 text-white'>Open to collaborators</Badge>
-                                                        : <Badge className='bg-red-700 text-white'>Not open to collaborators</Badge>
-                                                }
-
-                                                <span className="text-sm text-red-500 dark:text-red-400 italic line-clamp-2 mt-2">
-                                                    Problem: {idea.problem}
-                                                </span>
-                                            </div>
-
-                                            <div className='mt-3 flex justify-between items-center'>
-                                                <div className='flex gap-3'>
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <div className='dark:bg-muted/90 bg-gray-100 flex gap-1 rounded-full px-2 py-1 dark:text-white text-black items-center'>
-                                                                <ArrowUp className='stroke-[3] duration-200 hover:bg-blue-800 rounded-full p-1 hover:text-white' />
-                                                                <span className='text-xs font-semibold'>20</span>
-                                                                <ArrowDown className='stroke-[3] duration-200 hover:bg-orange-800 rounded-full p-1 hover:text-white' />
-                                                            </div>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            <p>Upvote if you find this idea valuable. Downvote if you think it{"'"}s not helpful.</p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                    <div className='dark:bg-muted/90 bg-gray-100 flex gap-1 rounded-full px-3 py-1 dark:text-white text-black items-center duration-200 dark:hover:bg-muted/60 hover:bg-gray-200'>
-                                                        <MessageCircle className='w-4 h-4' />
-                                                        <span className='text-xs font-semibold'>20</span>
+                                                    <div>
+                                                        <span className='text-xs text-black/70 dark:text-white/70'>Posted 20 minutes ago</span>
                                                     </div>
                                                 </div>
-
-                                                <div>
-                                                    <span className='text-xs text-black/70 dark:text-white/70'>Posted 20 minutes ago</span>
-                                                </div>
                                             </div>
+                                            <hr className='w-[100%] md:w-[80%] mx-auto' />
                                         </div>
-                                        <hr className='w-[100%] md:w-[80%] mx-auto' />
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    )
-                    }
+                                    ))
+                                }
+                            </div>
+                        )
+                        }
+                    </div>
                 </div>
             </div>
         </div>
