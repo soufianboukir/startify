@@ -1,5 +1,4 @@
-
-import mongoose, { Schema, Document, model } from "mongoose"
+import mongoose, { Schema, Document, model, Types } from "mongoose"
 
 export interface IIdea extends Document {
     title: string
@@ -8,6 +7,8 @@ export interface IIdea extends Document {
     tags: string[]
     author: mongoose.Types.ObjectId
     isOpenToCollab: boolean
+    upVotes?: Types.ObjectId[];
+    downVotes?: Types.ObjectId[];
     category: string
     createdAt: Date
     updatedAt: Date
@@ -22,6 +23,8 @@ const ideaSchema = new Schema<IIdea>(
         isOpenToCollab: {type: Boolean, required: true, default: false},
         category: { type: String, required: true },
         author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+        upVotes: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
+        downVotes: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
     },
     {
         timestamps: true,

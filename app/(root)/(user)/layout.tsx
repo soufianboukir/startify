@@ -3,9 +3,10 @@
 
 import { ProfileMenu } from '@/components/dropdown-menu'
 import { IdeaForm } from '@/components/idea-form'
+import { Notifications } from '@/components/notifications'
 import { SearchInput } from '@/components/search-input'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { Bell, Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -31,7 +32,7 @@ const Layout = () => {
 
             <div className='flex gap-4 items-center'>
                 <Mail className='w-5 h-5 hidden md:block'/>
-                <Bell className='w-5 h-5 hidden md:block'/>
+                <Notifications />
                 <IdeaForm />
                 {
                     session && <ProfileMenu session={session}/>

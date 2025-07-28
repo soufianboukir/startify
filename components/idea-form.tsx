@@ -50,9 +50,10 @@ export function IdeaForm({ idea }: { idea?: Idea}) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         const ideaData = { title, description, problem, tags, isOpenToCollab, category }
+        
         setLoading(true)
         try{
-            const response = await api.post(`/ideas`,{ideaData})
+            const response = await api.post(`/ideas`,{idea: ideaData})
             if(response.status === 200){
                 toast.success("Your idea has been shared")
                 setTitle('')
@@ -92,7 +93,7 @@ export function IdeaForm({ idea }: { idea?: Idea}) {
                     : <PlusSquare className="w-5 h-5 hidden md:block cursor-pointer" />
                 }
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-[700px]">
                 <form onSubmit={handleSubmit}>
                     <DialogHeader>
                         <DialogTitle>Share new idea</DialogTitle>

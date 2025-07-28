@@ -1,15 +1,16 @@
+import CommentsLength from '@/components/commentsLength'
 import { EmptyState } from '@/components/empty-state'
 import { IdeaMenu } from '@/components/idea-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import Votes from '@/components/votes'
 import { dbConnection } from '@/config/db'
 import { Idea as IIdea } from '@/interfaces/idea'
 import { authOptions } from '@/lib/auth'
 import Idea from '@/models/idea'
 import User from '@/models/user'
-import { formatDistanceToNow } from 'date-fns'
-import { ArrowDown, ArrowUp, Cake, MessageCircle, SquareArrowUpRight } from 'lucide-react'
+import { format, formatDistanceToNow } from 'date-fns'
+import { Cake, SquareArrowUpRight } from 'lucide-react'
 import { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
@@ -84,7 +85,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                     </p>
                     <div className='md:flex block gap-8 justify-center'>
                         <p className='font-semibold items-center justify-center flex gap-2 mb-3 md:mb-0'>
-                            <Cake /> <span>Joined on 13-07-2024</span>
+                            <Cake /> <span>Joined on {format(user.createdAt,'dd-MM-yyyy')}</span>
                         </p>
                         {
                             user.website &&
@@ -146,22 +147,8 @@ export default async function Page({ params }: { params: Promise<{ username: str
 
                                                 <div className='mt-3 flex justify-between items-center'>
                                                     <div className='flex gap-3'>
-                                                        <Tooltip>
-                                                            <TooltipTrigger asChild>
-                                                                <div className='dark:bg-muted/90 bg-gray-100 flex gap-1 rounded-full px-2 py-1 dark:text-white text-black items-center'>
-                                                                    <ArrowUp className='stroke-[3] duration-200 hover:bg-blue-800 rounded-full p-1 hover:text-white' />
-                                                                    <span className='text-xs font-semibold'>20</span>
-                                                                    <ArrowDown className='stroke-[3] duration-200 hover:bg-orange-800 rounded-full p-1 hover:text-white' />
-                                                                </div>
-                                                            </TooltipTrigger>
-                                                            <TooltipContent>
-                                                                <p>Upvote if you find this idea valuable. Downvote if you think it{"'"}s not helpful.</p>
-                                                            </TooltipContent>
-                                                        </Tooltip>
-                                                        <div className='dark:bg-muted/90 bg-gray-100 flex gap-1 rounded-full px-3 py-1 dark:text-white text-black items-center duration-200 dark:hover:bg-muted/60 hover:bg-gray-200'>
-                                                            <MessageCircle className='w-4 h-4' />
-                                                            <span className='text-xs font-semibold'>20</span>
-                                                        </div>
+                                                        <Votes ideaId={idea._id} upVotes={idea?.upVotes} downVotes={idea.downVotes}/>
+                                                        <CommentsLength ideaId={idea._id}/>
                                                     </div>
 
                                                     <div>

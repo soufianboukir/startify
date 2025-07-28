@@ -9,7 +9,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ idea
     const { searchParams } = new URL(req.url)
     const page = parseInt(searchParams.get('page') || '1', 10)
     const limit = 10
-    const skip = (page - 1) * limit
 
     if (!isValidObjectId(ideaId)) {
         return NextResponse.json({ message: 'Invalid idea ID' }, { status: 400 })
@@ -17,15 +16,25 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ idea
 
     await dbConnection()
 
-    const total = await Comment.countDocuments({ idea: ideaId, parent: null })
-    const comments = await Comment.find({ idea: ideaId, parent: null })
-        .sort({ 'likes.length': -1 })
-        .skip(skip)
-        .limit(limit)
-        .populate('author', 'name image username')
-        .lean()
+    const total = await Comment.countDocuments({ idea: ideaId })
+    const allComments = await Comment.find({ idea: ideaId })
+      .populate('author', 'username image name')
+      .lean();
 
-    return NextResponse.json({comments, total}, { status: 200 })
+    allComments.sort((a, b) => {
+      const aLikes = a.likes?.length || 0;
+      const bLikes = b.likes?.length || 0;
+
+      if (bLikes === aLikes) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+
+      return bLikes - aLikes;
+    });
+
+    const paginated = allComments.slice((page - 1) * limit, page * limit);
+
+    return NextResponse.json({comments: paginated, total}, { status: 200 })
     } catch (error) {
         return NextResponse.json({ message: 'Failed to fetch comments', error }, { status: 500 })
     }

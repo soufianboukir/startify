@@ -21,13 +21,8 @@ export const Comments = ({ ideaId, session }: { ideaId: string, session: Session
     const [totalComments,setTotalComments] = useState(0)
     const disableBtn = commentInput === ''
     const [moreLoading,setMoreLoading] = useState(false)
-    const [replyingTo,setReplyingTo] = useState<{username?: string, commentId: string}>({username: '', commentId: ''})
-    const [replyComment,setReplyComment] = useState('')
-    const disableReply = replyComment === ''
-    const [replying,setReplying] = useState(false)
 
     
-
     useEffect(() => {
         const getComments = async () => {
             try {
@@ -82,27 +77,7 @@ export const Comments = ({ ideaId, session }: { ideaId: string, session: Session
             setPosting(false)
         }
     }
-    const replyToComment = async () =>{
-        if( replyComment === '') return
-        try{
-            setReplying(true)
-            console.log(replyingTo);
-            
-            const res = await api.post(`/comments`,{content: replyComment, ideaId, commentId: replyingTo.commentId})
-            if(res.status === 200){
-                toast.success('Replyed successfully')
-                setReplyComment('')
-                setReplyingTo({username: '', commentId: ''})
-                setComments([{content:replyComment, author: {name: session.user.name!,
-                    username: session.user.username,
-                    image: session.user.image!}, createdAt: new Date(), parent: {_id : replyingTo.commentId, createdAt: new Date()}},...comments])
-            }
-        }catch{
-            toast.error('An error occured. try again')
-        }finally{
-            setReplying(false)
-        }
-    }
+
     return (
         <div>
             <div className="flex gap-2">
@@ -119,15 +94,7 @@ export const Comments = ({ ideaId, session }: { ideaId: string, session: Session
             <div className="mt-6 flex flex-col gap-3">
                     {comments && comments.length && !loading ? comments.map((comment) => (
                         <div key={comment._id}>
-                            <CommentItem 
-                                comment={comment} 
-                                replying={replying} 
-                                replyingTo={replyingTo} 
-                                setReplyingTo={setReplyingTo}
-                                disableReply={disableReply}
-                                replyComment={replyComment}
-                                setReplyComment={setReplyComment}
-                                replyToComment={replyToComment}/>
+                            <CommentItem comment={comment} session={session}/>
                         </div>
                     )): null}
             </div>

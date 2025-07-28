@@ -18,7 +18,15 @@ import { Loader, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 
-export function DeleteIdea({ ideaId }: { ideaId: string }) {
+
+type DeleteDialogProps = {
+    ideaId?: string
+    commentId?: string
+    type?: 'Comment' | 'Idea'
+}
+
+
+export function DeleteDialog({ ideaId, commentId, type }: DeleteDialogProps) {
 
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
@@ -30,10 +38,20 @@ export function DeleteIdea({ ideaId }: { ideaId: string }) {
         setLoading(true)
 
         try {
-            const res = await api.delete(`/ideas/${ideaId}`)
-            if (res.status === 200) {
-                toast.success('Idea has been deleted')
-                setOpen(false)
+            if( type === 'Idea'){
+                const res = await api.delete(`/ideas/${ideaId}`)
+                if (res.status === 200) {
+                    toast.success('Idea has been deleted')
+                    setOpen(false)
+                    setInput('')
+                }
+            }else if (type === 'Comment'){
+                const res = await api.delete(`/comments/delete/${commentId}`)
+                if (res.status === 200) {
+                    toast.success('Comment has been deleted')
+                    setOpen(false)
+                    setInput('')
+                }
             }
         } catch {
             toast.error('An error occured. Try again')
@@ -53,9 +71,14 @@ export function DeleteIdea({ ideaId }: { ideaId: string }) {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[520px]">
                     <DialogHeader>
-                        <DialogTitle>Delete Idea</DialogTitle>
+                        <DialogTitle>Delete {type}</DialogTitle>
                         <DialogDescription>
-                            Deleting an idea is permanent and cannot be undone. This action will remove the idea from your profile and make it unavailable to other users.
+                            {
+                                type === 'Idea' && "Deleting an idea is permanent and cannot be undone. This action will remove the idea from your profile and make it unavailable to other users."
+                            }
+                            {
+                                type === 'Comment' && "Are you sure you want to delete the comment?"
+                            }
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4">

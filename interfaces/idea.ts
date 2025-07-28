@@ -9,6 +9,8 @@ export interface Idea {
     author: User
     isOpenToCollab: boolean
     category: string
+    upVotes: string[]
+    downVotes: string[]
     createdAt: Date
     updatedAt: Date
 }

@@ -5,7 +5,6 @@ export interface IComment extends Document {
   author: Types.ObjectId;
   idea: Types.ObjectId;
   likes?: Types.ObjectId[];
-  replies: IComment[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -16,7 +15,6 @@ const commentSchema = new Schema<IComment>(
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     idea: { type: Schema.Types.ObjectId, ref: 'Idea', required: true },
     likes: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
-    replies: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
   },
   { timestamps: true }
 );

@@ -7,7 +7,8 @@ export interface Comment {
     author?: User
     idea?: Idea
     parent?: Comment
-    likes?: User[]
+    likes: User[]
     createdAt: Date
     updatedAt?: Date
+    replies: Comment[]
 }

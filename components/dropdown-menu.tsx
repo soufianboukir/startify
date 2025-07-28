@@ -44,8 +44,10 @@ export function ProfileMenu({ session }: { session: Session }) {
                         Account settings
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                    Keyboard shortcuts
+                <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link href={`/notifications`}>
+                        Notifications
+                    </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
 
