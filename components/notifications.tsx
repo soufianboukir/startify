@@ -78,6 +78,7 @@ export const Notifications = () => {
                         <Link
                             href={notification.link!}
                             key={idx}
+                            onClick={() => setOpen(false)}
                             className={cn(
                             "p-4 border-b cursor-pointer transition-all duration-300",
                             "flex items-start gap-4",

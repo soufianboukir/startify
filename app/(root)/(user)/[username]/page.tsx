@@ -1,5 +1,7 @@
 import CommentsLength from '@/components/commentsLength'
 import { EmptyState } from '@/components/empty-state'
+import { FollowButton } from '@/components/follow-btn'
+import { FollowingFollowers } from '@/components/following-followers-dialog'
 import { IdeaMenu } from '@/components/idea-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -7,6 +9,7 @@ import Votes from '@/components/votes'
 import { dbConnection } from '@/config/db'
 import { Idea as IIdea } from '@/interfaces/idea'
 import { authOptions } from '@/lib/auth'
+import Follower from '@/models/follower'
 import Idea from '@/models/idea'
 import User from '@/models/user'
 import { format, formatDistanceToNow } from 'date-fns'
@@ -59,6 +62,11 @@ export default async function Page({ params }: { params: Promise<{ username: str
     if (!user) {
         return notFound();
     }
+
+    const followers = await Follower.find({ followingUser: user._id }).populate('followerUser').lean();
+    const following = await Follower.find({ followerUser: user._id }).populate('followingUser').lean();
+    const isFollowing = await Follower.findOne({followerUser: session?.user.id,followingUser: user._id});
+
     const ideas = await Idea.find({ author: user._id }).populate('author', 'name username image').sort({ createdAt: -1 })
     const isCurrentUser = session?.user.id === user._id.toString();
 
@@ -67,7 +75,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
         <div className='lg:w-[70%] md:w-[80%] mx-auto w-[95%]'>
             <div className='dark:bg-muted/40 rounded-md h-26 w-[100%] bg-gray-100'>
                 <div className='flex justify-center'>
-                    <Avatar className="cursor-pointer w-26 mt-4 h-26">
+                    <Avatar className="cursor-pointer w-26 mt-8 h-26">
                         <AvatarImage src={user.image} />
                         <AvatarFallback>{session?.user.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
@@ -78,6 +86,19 @@ export default async function Page({ params }: { params: Promise<{ username: str
                 <div>
                     <h1 className='text-4xl font-semibold mb-4'>{user.name}</h1>
                     <p className='text-xl font-semibold mb-4'>{user.headLine || "No headline setted yet"}</p>
+
+                    <div className="flex items-center justify-center gap-4 mb-4 text-sm text-gray-700 dark:text-gray-300">
+                            <FollowingFollowers type={'followers'} followers={followers}/>
+                        <div className="w-px h-4 bg-gray-400 dark:bg-gray-600"></div>
+                            <FollowingFollowers type='following' following={following}/>
+
+                        {
+                            !isCurrentUser && (
+                                <FollowButton userId={user._id} isFollowing={isFollowing}/>
+                            )
+                        }
+                    </div>
+
                     <p className='md:w-[70%] w-[90%] mx-auto mb-4'>
                         {
                             user.bio ? user.bio
