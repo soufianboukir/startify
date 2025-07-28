@@ -13,7 +13,7 @@ import { ReportDialog } from "./report-dialog"
 import { ToggleSave } from "./toggle-save"
 
 
-export function IdeaMenu({ isCurrentUser, idea }: { isCurrentUser: boolean, idea: Idea}) {
+export function IdeaMenu({ isCurrentUser, idea, saved }: { isCurrentUser: boolean, idea: Idea, saved?: boolean}) {
   
   return (
     <DropdownMenu>
@@ -23,7 +23,7 @@ export function IdeaMenu({ isCurrentUser, idea }: { isCurrentUser: boolean, idea
       <DropdownMenuContent className="w-40" align="start">
         <DropdownMenuGroup>
           <DropdownMenuItem className="cursor-pointer" asChild>
-            <ToggleSave ideaId={idea._id}/>
+            <ToggleSave ideaId={idea._id} isSaved={saved}/>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer" asChild>
             <ReportDialog ideaId={idea._id} type="Idea"/>

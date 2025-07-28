@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
         const { searchParams } = new URL(req.url);
         const pageParam = searchParams.get('page');
         const page = pageParam ? parseInt(pageParam) : 1;
-        const limit = 10;
+        const limit = 6;
         const skip = (page - 1) * limit;
 
         const [saves, total] = await Promise.all([
@@ -27,8 +27,8 @@ export async function GET(req: NextRequest) {
                 .skip(skip)
                 .limit(limit)
                 .populate({
-                path: 'idea',
-                populate: { path: 'author', select: 'name image username' }
+                    path: 'idea',
+                    populate: { path: 'author', select: 'name image username' }
                 }),
             Save.countDocuments({ user: userId }),
         ]);
@@ -37,6 +37,8 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json({ saves, totalPages }, { status: 200 });
     } catch (error) {
+        console.log(error);
+        
         return NextResponse.json({ message: 'Failed to fetch saved ideas', error }, { status: 500 });
     }
 }

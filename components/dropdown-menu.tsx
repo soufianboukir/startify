@@ -36,8 +36,10 @@ export function ProfileMenu({ session }: { session: Session }) {
                         My profile
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                    Saved ideas
+                <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link href={`/saved`}>
+                        Saved items
+                    </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer" asChild>
                     <Link href={`/settings`}>

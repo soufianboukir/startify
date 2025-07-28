@@ -5,7 +5,7 @@ import { Save } from 'lucide-react'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 
-export const ToggleSave = ({ ideaId }: {ideaId: string}) => {
+export const ToggleSave = ({ ideaId,isSaved }: {ideaId: string, isSaved?:boolean}) => {
     const [loading,setLoading] = useState(false)
     
     const toggleSave = async () =>{
@@ -26,7 +26,7 @@ export const ToggleSave = ({ ideaId }: {ideaId: string}) => {
             <Save className="h-4 w-4"/>
             <span>
                 {
-                    loading ? "loading...": "Save"
+                    loading ? "loading...": isSaved ? "Unsave" : "Save"
                 }
             </span>
         </button>

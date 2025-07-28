@@ -3,17 +3,18 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, Loader } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-// import { Avatar, AvatarImage } from '@/components/ui/avatar';
-// import { cn } from '@/lib/utils';
-// import Link from 'next/link';
 import { toast } from 'sonner';
-import { Notification } from '@/interfaces/notification';
 import { api } from '@/config/api';
-// import { formatDistanceToNow } from 'date-fns';
-// import { EmptyState } from '@/components/empty-state';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Save } from '@/interfaces/save';
+import { IdeaMenu } from '@/components/idea-menu';
+import Votes from '@/components/votes';
+import Link from 'next/link';
+import { formatDistanceToNow } from 'date-fns';
+import { EmptyState } from '@/components/empty-state';
 
 const SavedPage = () => {
-    const [ideas,setIdeas] = useState<Notification[]>([]);
+    const [items,setItems] = useState<Save[]>([]);
     const [loading,setLoading] = useState<boolean>(true);
     const [page,setPage] = useState<number>(1);
     const [totalPages,setTotalPages] = useState<number>(1);
@@ -23,8 +24,10 @@ const SavedPage = () => {
     const fetchNotifications = async (currentPage: number) => {
         try {
             const response = await api.get(`/saves?page=${currentPage}`)
+            console.log(response);
+            
             if (response.status === 200) {
-                setIdeas(response.data.saves);
+                setItems(response.data.saves);
                 setTotalPages(response.data.totalPages);
             } else {
                 toast.error('Operation failed', {
@@ -62,82 +65,68 @@ const SavedPage = () => {
     </div>;
 
     return (
-      <div className="max-w-2xl mx-auto">
-          {
-            ideas && ideas.length ? (
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-bold">Saved ideas</h1>
-                </div>
-            ): null
-          }
-        
-          <div className="space-y-2">
-              {/* {ideas && ideas.length > 0 ? (
-                ideas.map((idea) => (
-                    <Link
-                        key={notification._id}
-                        href={notification.link!}
-                        className={cn(
-                            "flex items-start gap-4 p-4 rounded-lg border hover:bg-blue-50 dark:hover:bg-muted/10 transition-colors",
-                            !notification.seen && "bg-blue-100/50 dark:bg-muted/40"
-                        )}
-                    >
-                    <Avatar className="h-10 w-10">
-                        {
-                        notification.fromUser?.image ? 
-                            <AvatarImage src={notification.fromUser.image} />
-                        : <div className={`w-10 h-10 flex justify-center items-center rounded-full`}>
-                                {
-                                    notification.fromUser?.username.charAt(0)
-                                }
-                            </div>
-                        } 
-                    </Avatar>
-                        <div className="flex-1">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="font-medium">
-                                        <span className='text-blue-400'>{notification?.type}</span> 
-                                    </p>
-                                    <p className='text-sm'>{notification.content}</p>
-                                </div>
-                                <div className='flex gap-2 items-center'>
-                                    <div className='bg-blue-500 text-white text-[12px] px-1 rounded-xs font-medium'>
-                                        {
-                                            !notification.seen && "new"
-                                        }
+        <div className="max-w-7xl px-3 mx-auto">
+            {
+                items && items.length ? (
+                    <div className="flex items-center justify-between mb-6">
+                        <h1 className="text-2xl font-bold">Saved ideas</h1>
+                    </div>
+                ): null
+            }
+            {
+                items && items.length === 0 ?
+                    <EmptyState message='No saved items' description='Your saved items will be appear here'/>
+                :null
+            }
+
+            <div className="space-y-2 grid md:grid-cols-2 grid-cols-1 lg:grid-cols-3 gap-3">
+                {
+                    items && items.length ? items.map((item: Save) => (
+                        <div key={item._id} className='dark:bg-muted/30 bg-gray-100/70 rounded-sm px-3 py-2 cursor-pointer'>
+                            <div className='flex justify-between items-center'>
+                                <div className='flex gap-2 items-center'> 
+                                    <Avatar>
+                                        <AvatarImage src={item.idea.author.image} />
+                                        <AvatarFallback>{item.idea.author.name.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+
+                                    <div className='flex flex-col'>
+                                        <span className='font-semibold'>{item.idea.author.name}</span>
+                                        <span className='text-xs font-medium'>{item.idea.author.username}</span>
                                     </div>
-                                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
                                 </div>
+
+                                <IdeaMenu isCurrentUser={false} idea={item.idea} saved={true}/>
                             </div>
-                            <div className="flex items-center mt-1 text-xs text-muted-foreground">
-                                <Clock className="h-3 w-3 mr-1" />
-                                {
-                                    formatDistanceToNow(notification.createdAt, { addSuffix: true })
-                                }
+
+                            <div className='mt-3'>
+                                <Link href={`/idea/${item.idea._id}`} className='font-semibold mb-2 hover:underline duration-100'>{item.idea.title}</Link>
+                                <span className='text-sm italic line-clamp-4'>{item.idea.description}</span>
+                            </div>
+
+                            <div className='mt-2 flex justify-between items-center'>
+                                <Votes ideaId={item.idea._id} upVotes={item.idea.upVotes} downVotes={item.idea.downVotes}/>
+                                <span className='text-xs'>Saved {formatDistanceToNow(item.createdAt, {addSuffix: true})}</span>
                             </div>
                         </div>
-                    </Link>
-                ))
-              ) : (
-                <EmptyState message='No saved found' description='No saved ideas was found. your saved ideas will be appear here'/>
-              )} */}
-          </div>
-          <br />
+                    )) : null
+                }
+            </div>
+            <br />
 
-          {
-            ideas && ideas.length ?
-                <div className='flex justify-between'>
-                    <Button onClick={handlePrev} className='cursor-pointer' disabled={disablePrev}>
-                        <ChevronLeft /> Previews
-                    </Button>
-                    <Button onClick={handleNext} className='cursor-pointer' disabled={disableNext}>
-                        Next <ChevronRight /> 
-                    </Button>
-                </div>
-            :null
-          }
-      </div>
+            {
+                items && items.length ?
+                    <div className='flex justify-between mb-2'>
+                        <Button onClick={handlePrev} className='cursor-pointer' disabled={disablePrev}>
+                            <ChevronLeft /> Previews
+                        </Button>
+                        <Button onClick={handleNext} className='cursor-pointer' disabled={disableNext}>
+                            Next <ChevronRight /> 
+                        </Button>
+                    </div>
+                :null
+            }
+        </div>
     );
 };
 
