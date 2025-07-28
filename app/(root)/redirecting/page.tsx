@@ -10,7 +10,7 @@ const Redirecting = () => {
     const router = useRouter()
     
     if (status === 'loading') {
-        return <div className='bg-muted min-h-svh items-center justify-center gap-6 p-6 md:p-10 flex'>
+        return <div className='min-h-svh items-center justify-center gap-6 p-6 md:p-10 flex'>
             <Loader className='w-8 h-8 animate-spin'/>
         </div>
     }

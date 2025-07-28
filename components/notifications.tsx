@@ -14,7 +14,7 @@ import { toast } from 'sonner'
 export const Notifications = () => {
     const [notifications,setNotifications] = useState<Notification[]>([])
     const [loading,setLoading] = useState(false)
-
+    const [open,setOpen] = useState(false)
 
     const getNotifications = async () =>{
         const res = await api.get(`/notifications`)
@@ -46,7 +46,7 @@ export const Notifications = () => {
     }
 
     return (
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <div className='relative'>
                     <Bell className="w-5 h-5 hidden md:block cursor-pointer" />
@@ -114,7 +114,7 @@ export const Notifications = () => {
                             </div>
 
                             {!notification.seen && (
-                                <div className="mt-1 bg-blue-600 px-1 rounded-xs text-[12px] text-white">
+                                <div className="mt-1 bg-blue-600 px-1 rounded-xs text-[12px] text-white font-medium">
                                     new
                                 </div>
                             )}
@@ -123,7 +123,7 @@ export const Notifications = () => {
 
                 </div>
                 <div className="p-3 text-center rounded-b-xl">
-                    <span className="text-xs text-blue-600 dark:text-blue-400 cursor-pointer hover:underline">
+                    <span className="text-xs text-blue-600 dark:text-blue-400 cursor-pointer hover:underline" onClick={() => setOpen(false)}>
                         <Link href={'/notifications'}>
                             View all notifications
                         </Link>

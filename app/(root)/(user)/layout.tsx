@@ -12,7 +12,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-const Layout = () => {
+const Header = () => {
     const { data: session, status } = useSession()
     if(status === 'loading') return null
 
@@ -72,9 +72,9 @@ export default function RootLayout({
     }>) {
         return (
         <html lang="en">
-            <body className="h-[100vh] flex flex-col">
-                <Layout />
-                    <main className="flex-1">
+            <body className="h-[80vh] flex flex-col">
+                <Header />
+                    <main className="flex-1 min-h-[90vh] pt-20">
                         {children}
                     </main>
                 <Footer />

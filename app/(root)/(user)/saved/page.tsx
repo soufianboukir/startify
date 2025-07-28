@@ -1,30 +1,30 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { BellOff, ChevronLeft, ChevronRight, Clock, Loader } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { cn } from '@/lib/utils';
-import Link from 'next/link';
+// import { Avatar, AvatarImage } from '@/components/ui/avatar';
+// import { cn } from '@/lib/utils';
+// import Link from 'next/link';
 import { toast } from 'sonner';
 import { Notification } from '@/interfaces/notification';
 import { api } from '@/config/api';
-import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns';
+// import { EmptyState } from '@/components/empty-state';
 
-const NotificationsPage = () => {
-    const [notifications,setNotifications] = useState<Notification[]>([]);
+const SavedPage = () => {
+    const [ideas,setIdeas] = useState<Notification[]>([]);
     const [loading,setLoading] = useState<boolean>(true);
     const [page,setPage] = useState<number>(1);
     const [totalPages,setTotalPages] = useState<number>(1);
-    const [markingAsRead,setMarkingAsRead] = useState(false)
     const disablePrev = page === 1
     const disableNext = page === totalPages
 
     const fetchNotifications = async (currentPage: number) => {
         try {
-            const response = await api.get(`/notifications?page=${currentPage}`)
+            const response = await api.get(`/saves?page=${currentPage}`)
             if (response.status === 200) {
-                setNotifications(response.data.notifications);
+                setIdeas(response.data.saves);
                 setTotalPages(response.data.totalPages);
             } else {
                 toast.error('Operation failed', {
@@ -40,23 +40,6 @@ const NotificationsPage = () => {
         }
     };
 
-    const markAllAsRead = async () =>{
-        try{
-            setMarkingAsRead(true)
-            const res = await api.post(`/notifications`);
-            if(res.status === 200){
-                const updatedNotifications = notifications.map((notification) => ({
-                    ...notification,
-                    seen: true,
-                }));
-                setNotifications(updatedNotifications);
-            }
-        }catch{
-            toast.error('An error occured')
-        }finally{
-            setMarkingAsRead(false)
-        }
-    }
 
     useEffect(() => {
         fetchNotifications(page);
@@ -81,25 +64,16 @@ const NotificationsPage = () => {
     return (
       <div className="max-w-2xl mx-auto">
           {
-            notifications && notifications.length ? (
+            ideas && ideas.length ? (
                 <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-bold">Notifications</h1>
-                    <Button variant="ghost" className="text-primary cursor-pointer" disabled={markingAsRead} onClick={markAllAsRead}>
-                        {
-                            markingAsRead ? 
-                                <>
-                                    <Loader className='animate-spin'/> loading
-                                </>
-                            : "Mark all as read"
-                        }
-                    </Button>
+                    <h1 className="text-2xl font-bold">Saved ideas</h1>
                 </div>
             ): null
           }
         
           <div className="space-y-2">
-              {notifications && notifications.length > 0 ? (
-                notifications.map((notification) => (
+              {/* {ideas && ideas.length > 0 ? (
+                ideas.map((idea) => (
                     <Link
                         key={notification._id}
                         href={notification.link!}
@@ -146,19 +120,13 @@ const NotificationsPage = () => {
                     </Link>
                 ))
               ) : (
-              <div className="text-center py-12">
-                  <div className="mx-auto h-24 w-24 rounded-full bg-muted flex items-center justify-center mb-4">
-                      <BellOff className="h-10 w-10 text-muted-foreground" />
-                  </div>
-                  <h3 className="text-lg font-medium mb-1">No notifications</h3>
-                  <p className="text-muted-foreground">When you get notifications, they will appear here</p>
-              </div>
-              )}
+                <EmptyState message='No saved found' description='No saved ideas was found. your saved ideas will be appear here'/>
+              )} */}
           </div>
           <br />
 
           {
-            notifications && notifications.length ?
+            ideas && ideas.length ?
                 <div className='flex justify-between'>
                     <Button onClick={handlePrev} className='cursor-pointer' disabled={disablePrev}>
                         <ChevronLeft /> Previews
@@ -173,4 +141,4 @@ const NotificationsPage = () => {
     );
 };
 
-export default NotificationsPage;
+export default SavedPage;

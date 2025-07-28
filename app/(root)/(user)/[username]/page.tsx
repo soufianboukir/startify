@@ -56,14 +56,15 @@ export default async function Page({ params }: { params: Promise<{ username: str
     const session = await getServerSession(authOptions)
     await dbConnection()
     const user = await User.findOne({ username })
-    const ideas = await Idea.find({ author: user._id }).populate('author', 'name username image').sort({ createdAt: -1 })
-    const isCurrentUser = session?.user.id === user._id.toString();
-
     if (!user) {
         return notFound();
     }
+    const ideas = await Idea.find({ author: user._id }).populate('author', 'name username image').sort({ createdAt: -1 })
+    const isCurrentUser = session?.user.id === user._id.toString();
+
+    
     return (
-        <div className='pt-20 lg:w-[70%] md:w-[80%] mx-auto w-[95%]'>
+        <div className='lg:w-[70%] md:w-[80%] mx-auto w-[95%]'>
             <div className='dark:bg-muted/40 rounded-md h-26 w-[100%] bg-gray-100'>
                 <div className='flex justify-center'>
                     <Avatar className="cursor-pointer w-26 mt-4 h-26">
@@ -90,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         {
                             user.website &&
                             <p className='font-semibold items-center justify-center flex gap-2 hover:text-blue-500 duration-100'>
-                                <SquareArrowUpRight /> <Link href={user.website} target='_blank'>{user.website}</Link>
+                                <SquareArrowUpRight /> <a href={'https://'+user.website} target='_blank'>{user.website}</a>
                             </p>
                         }
                     </div>

@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     }
 
     return (
-        <div className='pt-20 lg:w-[70%] md:w-[80%] mx-auto w-[95%]'>
+        <div className='lg:w-[70%] md:w-[80%] mx-auto w-[95%]'>
             <div className='flex flex-col gap-3 mt-4'>
                 <div>
                     <div className='w-[100%] cursor-pointer md:w-[80%] mx-auto text-left duration-200 py-3 rounded-md px-3'>

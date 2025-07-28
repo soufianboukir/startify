@@ -14,7 +14,7 @@ export default async function Page () {
     if(!session) return null
 
     return (
-        <div className='pt-20 lg:w-[70%] md:w-[80%] mx-auto w-[95%]'>
+        <div className='lg:w-[70%] md:w-[80%] mx-auto w-[95%]'>
             <h1 className='text-3xl font-semibold'>Account settings</h1>
             <br />
             <div className='flex flex-col gap-5'>

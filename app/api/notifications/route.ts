@@ -31,7 +31,8 @@ export async function GET(req: NextRequest) {
             Notification.countDocuments({ toUser: userId })
         ]);
 
-        return NextResponse.json({ notifications, total }, { status: 200 });
+        const totalPages = Math.ceil(total / limit);
+        return NextResponse.json({ notifications, totalPages }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ message: 'Failed to fetch notifications', error }, { status: 500 });
     }

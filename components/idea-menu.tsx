@@ -7,9 +7,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Idea } from "@/interfaces/idea"
-import { EllipsisVertical, Save } from "lucide-react"
+import { EllipsisVertical } from "lucide-react"
 import { DeleteDialog } from "./delete-dialog"
 import { ReportDialog } from "./report-dialog"
+import { ToggleSave } from "./toggle-save"
 
 
 export function IdeaMenu({ isCurrentUser, idea }: { isCurrentUser: boolean, idea: Idea}) {
@@ -21,9 +22,8 @@ export function IdeaMenu({ isCurrentUser, idea }: { isCurrentUser: boolean, idea
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start">
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
-            <Save className="w-6 h-6"/>
-            Save
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <ToggleSave ideaId={idea._id}/>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer" asChild>
             <ReportDialog ideaId={idea._id} type="Idea"/>
