@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { api } from "@/config/api"
-import { Loader, Trash2 } from "lucide-react"
+import { Loader, Trash2, UserMinus } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -22,11 +22,12 @@ import { toast } from "sonner"
 type DeleteDialogProps = {
     ideaId?: string
     commentId?: string
-    type?: 'Comment' | 'Idea'
+    followerId?: string
+    type?: 'Comment' | 'Idea' | 'Follower'
 }
 
 
-export function DeleteDialog({ ideaId, commentId, type }: DeleteDialogProps) {
+export function DeleteDialog({ ideaId, commentId, followerId, type }: DeleteDialogProps) {
 
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
@@ -52,6 +53,13 @@ export function DeleteDialog({ ideaId, commentId, type }: DeleteDialogProps) {
                     setOpen(false)
                     setInput('')
                 }
+            }else if(type === 'Follower'){
+                const res = await api.delete(`/user/follow/removeFollower/${followerId}`)
+                if (res.status === 200) {
+                    toast.success('Follower has been deleted')
+                    setOpen(false)
+                    setInput('')
+                }
             }
         } catch {
             toast.error('An error occured. Try again')
@@ -63,12 +71,25 @@ export function DeleteDialog({ ideaId, commentId, type }: DeleteDialogProps) {
     return (
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
             <form>
-                <DialogTrigger asChild>
-                    <button className="flex items-center gap-2 text-red-500 px-2 py-1 cursor-pointer text-sm">
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                        Delete
-                    </button>
-                </DialogTrigger>
+                {
+                    type !== 'Follower' && (
+                        <DialogTrigger asChild>
+                            <button className="flex items-center gap-2 text-red-500 px-2 py-1 cursor-pointer text-sm">
+                                <Trash2 className="w-4 h-4 text-red-500" />
+                                Delete
+                            </button>
+                        </DialogTrigger>
+                    )
+                }
+                {
+                    type === 'Follower' && (
+                        <DialogTrigger asChild>
+                            <button className="flex items-center gap-2 bg-red-500 px-2 py-1 cursor-pointer text-sm rounded-sm">
+                                <UserMinus className="w-4 h-4 text-white" />
+                            </button>
+                        </DialogTrigger>
+                    )
+                }
                 <DialogContent className="sm:max-w-[520px]">
                     <DialogHeader>
                         <DialogTitle>Delete {type}</DialogTitle>
@@ -78,6 +99,9 @@ export function DeleteDialog({ ideaId, commentId, type }: DeleteDialogProps) {
                             }
                             {
                                 type === 'Comment' && "Are you sure you want to delete the comment?"
+                            }
+                            {
+                                type === 'Follower' && "Are you sure you want to delete the follower?"
                             }
                         </DialogDescription>
                     </DialogHeader>

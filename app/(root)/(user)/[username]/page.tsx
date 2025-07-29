@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import Votes from '@/components/votes'
 import { dbConnection } from '@/config/db'
+import { Follower as FollowerInterface, Following } from '@/interfaces/follower'
 import { Idea as IIdea } from '@/interfaces/idea'
 import { authOptions } from '@/lib/auth'
 import Follower from '@/models/follower'
@@ -63,8 +64,14 @@ export default async function Page({ params }: { params: Promise<{ username: str
         return notFound();
     }
 
-    const followers = await Follower.find({ followingUser: user._id }).populate('followerUser').lean();
-    const following = await Follower.find({ followerUser: user._id }).populate('followingUser').lean();
+    const followers = (await Follower.find({ followingUser: user._id })
+        .populate('followerUser', 'name username image')
+        .lean()) as FollowerInterface[];
+
+        const following = (await Follower.find({ followerUser: user._id })
+        .populate('followingUser', 'name username image')
+        .lean()) as Following[];
+
     const isFollowing = await Follower.findOne({followerUser: session?.user.id,followingUser: user._id});
 
     const ideas = await Idea.find({ author: user._id }).populate('author', 'name username image').sort({ createdAt: -1 })
@@ -88,10 +95,9 @@ export default async function Page({ params }: { params: Promise<{ username: str
                     <p className='text-xl font-semibold mb-4'>{user.headLine || "No headline setted yet"}</p>
 
                     <div className="flex items-center justify-center gap-4 mb-4 text-sm text-gray-700 dark:text-gray-300">
-                            <FollowingFollowers type={'followers'} followers={followers}/>
+                        <FollowingFollowers type={'followers'} followers={followers}/>
                         <div className="w-px h-4 bg-gray-400 dark:bg-gray-600"></div>
-                            <FollowingFollowers type='following' following={following}/>
-
+                        <FollowingFollowers type='following' following={following}/>
                         {
                             !isCurrentUser && (
                                 <FollowButton userId={user._id} isFollowing={isFollowing}/>
