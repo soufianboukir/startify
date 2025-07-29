@@ -1,95 +1,100 @@
-import { dbConnection } from '@/config/db';
-import { authOptions } from '@/lib/auth';
-import Follower from '@/models/follower';
-import Idea from '@/models/idea';
-import mongoose from 'mongoose';
-import { getServerSession } from 'next-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server'
+import mongoose from 'mongoose'
+import { dbConnection } from '@/config/db'
+import Follower from '@/models/follower'
+import Idea from '@/models/idea'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
 export const GET = async (req: NextRequest) => {
-  try {
-    await dbConnection();
-    
-    const session = await getServerSession(authOptions);
-    const userId = session?.user?.id;
+    try {
+      await dbConnection()
 
-    if (!userId) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
+      const pageParam = req.nextUrl.searchParams.get('page')
+      const limitParam = req.nextUrl.searchParams.get('limit')
 
-    const page = parseInt(req.nextUrl.searchParams.get('page') || '1');
-    const limit = 3;
-    const skip = (page - 1) * limit;
+      const session = await getServerSession(authOptions)
+      if( !session || !session.user.id ) {
+        return NextResponse.json({message:"Unauthorized"},{status: 401})
+      }
+      const userId = session.user.id
 
-    const following = await Follower.find({ followerUser: userId }).select('followingUser');
-    const followingIds = following.map(f => f.followingUser.toString());
+      const page = parseInt(pageParam || '1')
+      const limit = parseInt(limitParam || '2')
+      const skip = (page - 1) * limit
 
-    const ideas = await Idea.aggregate([
+      const following = await Follower.find({ followerUser: userId }).select('followingUser')
+      const followingUserIds = following.map(f => f.followingUser.toString())
+
+      const ideas = await Idea.aggregate([
         {
-            $addFields: {
-            upVotesCount: { $size: { $ifNull: ['$upVotes', []] } },
-            isFollowed: {
-                $in: [
-                '$author',
-                followingIds.map(id => new mongoose.Types.ObjectId(id))
-                ]
-            },
+          $addFields: {
+            upVoteCount: { $size: '$upVotes' },
+            isFromFollowedUser: {
+              $in: ['$author', followingUserIds.map(id => new mongoose.Types.ObjectId(id))]
             }
+          }
         },
         {
-            $lookup: {
+          $addFields: {
+            score: {
+              $add: [
+                '$upVoteCount',
+                { $cond: [{ $eq: ['$isFromFollowedUser', true] }, 3, 0] }
+              ]
+            }
+          }
+        },
+        { $sort: { score: -1, createdAt: -1 } },
+        {
+          $lookup: {
             from: 'users',
             localField: 'author',
             foreignField: '_id',
-            as: 'authorInfo'
-            }
+            as: 'author'
+          }
         },
         {
-            $unwind: '$authorInfo'
+          $unwind: '$author'
         },
         {
-            $addFields: {
-            author: {
-                _id: '$authorInfo._id',
-                name: '$authorInfo.name',
-                username: '$authorInfo.username',
-                image: '$authorInfo.image',
-            }
-            }
+          $project: {
+            title: 1,
+            description: 1,
+            problem: 1,
+            tags: 1,
+            isOpenToCollab: 1,
+            category: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            upVotes: 1,
+            downVotes: 1,
+            score: 1,
+            'author._id': 1,
+            'author.name': 1,
+            'author.username': 1,
+            'author.profilePicture': 1,
+          }
         },
         {
-            $project: { authorInfo: 0 }
-        },
-        {
-            $sort: {
-            isFollowed: -1,
-            upVotesCount: -1,
-            createdAt: -1
-            }
-        },
-        {
-            $facet: {
-            paginatedResults: [
-                { $skip: skip },
-                { $limit: limit }
-            ],
-            totalCount: [
-                { $count: 'count' }
-            ]
-            }
+          $facet: {
+            data: [{ $skip: skip }, { $limit: limit }],
+            totalCount: [{ $count: 'count' }]
+          }
         }
-    ]);
+      ])
 
+      const result = ideas[0]
+      const totalItems = result.totalCount[0]?.count || 0
+      const totalPages = Math.ceil(totalItems / limit)
 
-    const results = ideas[0].paginatedResults;
-    const totalCount = ideas[0].totalCount[0]?.count || 0;
-    const totalPages = Math.ceil(totalCount / limit);
-
-    return NextResponse.json({ ideas: results, totalPages,totalIdeas: totalCount }, { status: 200 });
-
-  } catch (err){
-    console.log(err);
-    
-    return NextResponse.json({ message: 'Server error' }, { status: 500 });
-  }
-};
+      return NextResponse.json({
+          ideas: result.data,
+          page,
+          totalPages,
+      })
+    } catch (error) {
+      console.error('[FEED_MERGED_PAGINATED_ERROR]', error)
+      return NextResponse.json({ error: 'Server error' }, { status: 500 })
+    }
+}
