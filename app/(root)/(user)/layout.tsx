@@ -18,13 +18,13 @@ const Header = () => {
 
     return (
         <div className='fixed py-3 items-center border border-b dark:border-muted/60 border-b-gray-200 w-[100%] md:px-16 px-6 flex justify-between z-10 bg-white dark:bg-background'>
-            <div className='flex gap-2 items-center cursor-pointer'>
+            <Link className='flex gap-2 items-center cursor-pointer' href={'/feed'}>
                 <Image src={'/icons/startify-logo.png'} width={30} height={30} alt='Startify logo' className='rounded-xs'/>
                 <div className='hidden flex-col md:flex'>
                     <span className='font-semibold'>Startify</span>
                     <span className='text-xs'>Connecting worldwide ideas</span>
                 </div>
-            </div>
+            </Link>
 
             <div className='lg:w-[25%] md:w-[50%] w-[60%]'>
                 <SearchInput />

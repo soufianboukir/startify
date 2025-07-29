@@ -1,5 +1,5 @@
 import { Comments } from "@/components/comments"
-import CommentsLength from "@/components/commentsLength"
+import { CommentsLength } from "@/components/commentsLength"
 import { IdeaMenu } from "@/components/idea-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
