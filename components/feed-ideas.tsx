@@ -37,6 +37,7 @@ export const FeedIdeas = () => {
         getIdeas()
     }, [])
 
+    
     useEffect(() =>{
         const getMore = async () =>{
             if( page === 1) return 
