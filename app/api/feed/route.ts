@@ -18,7 +18,7 @@ export const GET = async (req: NextRequest) => {
     }
 
     const page = parseInt(req.nextUrl.searchParams.get('page') || '1');
-    const limit = 10;
+    const limit = 3;
     const skip = (page - 1) * limit;
 
     const following = await Follower.find({ followerUser: userId }).select('followingUser');
@@ -85,7 +85,7 @@ export const GET = async (req: NextRequest) => {
     const totalCount = ideas[0].totalCount[0]?.count || 0;
     const totalPages = Math.ceil(totalCount / limit);
 
-    return NextResponse.json({ ideas: results, totalPages }, { status: 200 });
+    return NextResponse.json({ ideas: results, totalPages,totalIdeas: totalCount }, { status: 200 });
 
   } catch (err){
     console.log(err);

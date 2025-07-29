@@ -4,16 +4,16 @@ import React, { useEffect, useState } from 'react'
 import { api } from '@/config/api'
 import { Loader } from 'lucide-react'
 import { EmptyState } from './empty-state'
-import { Session } from 'next-auth'
 import { Idea } from '@/interfaces/idea'
 import { IdeaCard } from './idea-card'
 
-export const FeedIdeas = ({ session }: { session: Session }) => {
+export const FeedIdeas = () => {
 
     const [ideas,setIdeas] = useState<Idea[]>([])
     const [loading,setLoading] = useState(true)
     const [page,setPage] = useState(1)
     const [totalPages,setTotalPages] = useState(0)
+    const [totalIdeas,setTotalIdeas] = useState(0)
     const [moreLoading,setMoreLoading] = useState(false)
 
     
@@ -25,6 +25,7 @@ export const FeedIdeas = ({ session }: { session: Session }) => {
                 if (res.status === 200) {
                     setTotalPages(res.data.totalPages)
                     setIdeas(res.data.ideas)
+                    setTotalIdeas(res.data.totalIdeas)
                 }
             } catch {
                 // setError("An error occurred")
@@ -50,16 +51,13 @@ export const FeedIdeas = ({ session }: { session: Session }) => {
             setMoreLoading(false)
         }
         getMore()
-    },[page, ideas])
+    },[page])
 
 
     return (
         <div>
-            {/* {
-                totalComments > 10 && !loading && !moreLoading && comments.length <= totalComments && <div className='flex justify-around'>
-                    <span className='my-2 dark:text-white/50 text-black/50 text-sm' onClick={() => setPage(page + 1)}>Load more comments</span>
-                </div>
-            } */}
+            
+
 
             {
                 ideas && !loading && ideas.length ?
@@ -81,6 +79,11 @@ export const FeedIdeas = ({ session }: { session: Session }) => {
             }
             {
                 !loading && ideas.length === 0 && <EmptyState message='No posts found' description='Posts will be appear here if founded'/>
+            }
+            {
+                totalIdeas > 3 && !loading && !moreLoading && ideas.length <= totalIdeas && <div className='flex justify-around'>
+                    <span className='my-2 dark:text-white/50 text-black/50 text-sm cursor-pointer' onClick={() => setPage(page + 1)}>Load more ideas</span>
+                </div>
             }
         </div>
     )
