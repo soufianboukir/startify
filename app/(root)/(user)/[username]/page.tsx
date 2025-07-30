@@ -2,6 +2,7 @@ import { EmptyState } from '@/components/empty-state'
 import { FollowButton } from '@/components/follow-btn'
 import { FollowingFollowers } from '@/components/following-followers-dialog'
 import { IdeaCard } from '@/components/idea-card'
+import { MessageButton } from '@/components/message-btn'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { dbConnection } from '@/config/db'
 import { Follower as FollowerInterface, Following } from '@/interfaces/follower'
@@ -91,12 +92,38 @@ export default async function Page({ params }: { params: Promise<{ username: str
                     <p className='text-xl font-semibold mb-4'>{user.headLine || "No headline setted yet"}</p>
 
                     <div className="flex items-center justify-center gap-4 mb-4 text-sm text-gray-700 dark:text-gray-300">
-                        <FollowingFollowers type={'followers'} followers={followers}/>
-                        <div className="w-px h-4 bg-gray-400 dark:bg-gray-600"></div>
-                        <FollowingFollowers type='following' following={following}/>
+                        {
+                            isCurrentUser && (
+                                <>
+                                    <FollowingFollowers type={'followers'} followers={followers}/>
+                                    <div className="w-px h-4 bg-gray-400 dark:bg-gray-600"></div>
+                                    <FollowingFollowers type='following' following={following}/>
+                                </>
+                            )
+                        }
+                        {
+                            !isCurrentUser && (
+                                <div className="flex items-center gap-4 text-lg cursor-pointer">
+                                    <div className='flex gap-1 items-center'>
+                                        <span className="font-semibold">{followers.length}</span>
+                                        <span className='text-sm'>Followers</span>
+                                    </div>
+                                    <div className="w-px h-4 bg-gray-400 dark:bg-gray-600"></div>
+                                    <div className='flex gap-1 items-center'>
+                                        <span className="font-semibold">{following.length}</span>
+                                        <span className='text-sm'>Following</span>
+                                    </div>
+                                </div>
+                            )
+                        }
                         {
                             !isCurrentUser && (
                                 <FollowButton userId={user._id} isFollowing={isFollowing}/>
+                            )
+                        }
+                        {
+                            !isCurrentUser && (
+                                <MessageButton username={user.username}/>
                             )
                         }
                     </div>

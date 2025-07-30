@@ -6,6 +6,7 @@ import { IdeaForm } from '@/components/idea-form'
 import { Notifications } from '@/components/notifications'
 import { SearchInput } from '@/components/search-input'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { api } from '@/config/api'
 import { Mail } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -14,7 +15,28 @@ import React from 'react'
 
 const Header = () => {
     const { data: session, status } = useSession()
-    if(status === 'loading') return null
+
+    const [loading,setLoading] = React.useState(false)
+    const [unseenConvs,setUnseenConvs] = React.useState(0)
+
+    const fetchUnseenMssgs = async () =>{
+        try{
+        setLoading(true)
+        const res = await api.get('/messages/unseen')
+        if(res.status === 200){
+            setUnseenConvs(res.data.unseenConversations)
+        }
+        }catch{
+        
+        }finally{
+        setLoading(false)
+        }
+    }
+
+    React.useEffect(() =>{
+        fetchUnseenMssgs()
+    },[])
+    if(status === 'loading' || loading) return null
 
     return (
         <div className='fixed py-3 items-center border border-b dark:border-muted/60 border-b-gray-200 w-[100%] md:px-16 px-6 flex justify-between z-10 bg-white dark:bg-background'>
@@ -31,7 +53,18 @@ const Header = () => {
             </div>
 
             <div className='flex gap-4 items-center'>
-                <Mail className='w-5 h-5 hidden md:block'/>
+                <Link href={'/inbox'}>
+                    <div className='relative'>
+                        <Mail className="w-5 h-5 hidden md:block cursor-pointer" />
+                        {
+                            unseenConvs > 0 ?
+                                <div>
+                                    <span className="absolute -top-0.5 -right-1 w-2 h-2 bg-red-500 rounded-full md:block hidden"></span>
+                                </div>
+                            :null
+                        }
+                    </div>
+                </Link>
                 <Notifications />
                 <IdeaForm />
                 {

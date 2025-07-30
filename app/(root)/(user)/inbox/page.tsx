@@ -1,9 +1,18 @@
-import React from 'react'
+import MessagesPage from '@/components/messages'
+import { Loader } from 'lucide-react'
+import React, { Suspense } from 'react'
 
-export default function Page () {
+
+export default function Messages() {
     return (
         <div>
-            <h1 className='text-xl font-semibold'>this is the inbox page</h1>
+            <Suspense fallback={<div className="flex flex-col justify-center items-center dark:text-white/50 text-black/50 text-xs">
+                                        <Loader className="w-5 h-5 animate-spin" />
+                                        <span>Loading messages</span>
+                                    </div>}>
+                <MessagesPage />
+            </Suspense>
         </div>
     )
 }
+

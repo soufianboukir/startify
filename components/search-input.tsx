@@ -124,7 +124,7 @@ export function SearchInput() {
             <>
 
               {suggestedUsers.length > 0 && (
-                <CommandGroup heading="Suggested Developers">
+                <CommandGroup heading="Suggested users">
                   {suggestedUsers.map((user: User,index) => (
                     <CommandItem key={user._id || index} className="p-0">
                     <Link href={`/${user.username}`} className="flex gap-2 w-full hover:bg-muted items-center" onClick={() => setOpen(false)}>

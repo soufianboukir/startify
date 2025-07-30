@@ -31,8 +31,8 @@ export function FollowingFollowers({ type, followers = [], following = [] }: Fol
         <Dialog>
             <DialogTrigger asChild>
                 <div className="flex items-center gap-1 text-lg cursor-pointer">
-                <span className="font-semibold">{list.length}</span>
-                <span className='text-sm'>{type}</span>
+                    <span className="font-semibold">{list.length}</span>
+                    <span className='text-sm'>{type}</span>
                 </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px]">
