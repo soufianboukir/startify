@@ -20,7 +20,7 @@ const Header = () => {
         <div className='fixed py-3 items-center border border-b dark:border-muted/60 border-b-gray-200 w-[100%] md:px-16 px-6 flex justify-between z-10 bg-white dark:bg-background'>
             <Link className='flex gap-2 items-center cursor-pointer' href={'/feed'}>
                 <Image src={'/icons/startify-logo.png'} width={30} height={30} alt='Startify logo' className='rounded-xs'/>
-                <div className='hidden flex-col md:flex'>
+                <div className='hidden flex-col lg:flex'>
                     <span className='font-semibold'>Startify</span>
                     <span className='text-xs'>Connecting worldwide ideas</span>
                 </div>

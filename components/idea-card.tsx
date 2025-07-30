@@ -11,7 +11,7 @@ import { CommentsLength } from './commentsLength'
 export const IdeaCard = ({ idea, isCurrentUser }: { idea: Idea, isCurrentUser: boolean}) => {
     return (
         <div>
-            <div className='w-[100%] md:w-[80%] mx-auto text-left hover:bg-muted/10 duration-200 py-3 rounded-md px-3'>
+            <div className='w-[100%] mx-auto text-left hover:bg-muted/10 duration-200 py-3 rounded-md px-3'>
                 <div className='flex justify-between'>
                     <div className='flex gap-2 items-center'>
                         <Avatar className="cursor-pointer w-8 h-8">

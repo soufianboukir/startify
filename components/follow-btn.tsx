@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
 
-export const FollowButton = ({ userId, isFollowing }: { userId: string, isFollowing: boolean }) => {
+export const FollowButton = ({ userId, isFollowing, onlySVG }: { userId: string, isFollowing: boolean, onlySVG?: boolean }) => {
     const [loading,setLoading] = useState(false)
     const [isFollowingState,setIsFollowingState] = useState(isFollowing)
 
@@ -32,25 +32,53 @@ export const FollowButton = ({ userId, isFollowing }: { userId: string, isFollow
                 isFollowingState ?
                     <>
                         {
-                            loading ?<>
-                                <Loader className='animate-spin w-4 h-4'/>
-                                loading ...
+                            loading ? <>
+                                {
+                                    onlySVG ? 
+                                        <Loader className='animate-spin w-4 h-4'/>
+                                    :
+                                    <>
+                                        <Loader className='animate-spin w-4 h-4'/>
+                                        loading ...
+                                    </>
+                                }
                             </>
                              : <>
-                                <UserMinus className='w-4 h-4'/>
-                                unfollow user
+                                {
+                                    onlySVG ? 
+                                        <UserMinus className='w-4 h-4'/>
+                                    :
+                                    <>
+                                        <UserMinus className='w-4 h-4'/>
+                                        unfollow user
+                                    </>
+                                }
                             </>
                         }
                     </>
                 : <>
                     {
                         loading ?<>
-                            <Loader className='animate-spin w-4 h-4'/>
-                            loading ...
+                                {
+                                    onlySVG ? 
+                                        <Loader className='animate-spin w-4 h-4'/>
+                                    :
+                                    <>
+                                        <Loader className='animate-spin w-4 h-4'/>
+                                        loading ...
+                                    </>
+                                }
                         </>
                             : <>
-                            <UserPlus className='w-4 h-4'/>
-                            follow user
+                                {
+                                    onlySVG ? 
+                                        <UserPlus className='w-4 h-4'/>
+                                    :
+                                    <>
+                                        <UserPlus className='w-4 h-4'/>
+                                        follow user
+                                    </>
+                                }
                         </>
                     }
                 </>

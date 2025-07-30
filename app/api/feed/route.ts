@@ -73,7 +73,7 @@ export const GET = async (req: NextRequest) => {
             'author._id': 1,
             'author.name': 1,
             'author.username': 1,
-            'author.profilePicture': 1,
+            'author.image': 1,
           }
         },
         {

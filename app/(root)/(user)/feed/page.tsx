@@ -1,4 +1,5 @@
 import { FeedIdeas } from '@/components/feed-ideas'
+import { SuggestedUsers } from '@/components/suggested-users'
 import React from 'react'
 
 export const metadata = {
@@ -28,8 +29,15 @@ export const metadata = {
   
 const page = () => {
     return (
-        <div>
-            <FeedIdeas />
+        <div className="md:px-16 px-2 flex gap-6 items-start">
+            <div className="w-full md:w-[75%]">
+                <FeedIdeas />
+            </div>
+            <div className="hidden md:block w-[23%]">
+                <div className="fixed right-16 top-20 w-[23%] max-w-xs">
+                    <SuggestedUsers />
+                </div>
+            </div>
         </div>
     )
 }

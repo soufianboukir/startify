@@ -119,7 +119,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         }
                     </div>
 
-                    <div>
+                    <div className='md:w-[85%] w-[100%] mx-auto'>
                         {ideas.length === 0 ? (
                             <EmptyState
                                 message="No posts found"
