@@ -22,24 +22,26 @@ export async function GET(req: Request) {
     await dbConnection()
 
     const regex = new RegExp(query, 'i')
-
+  
     const [users, ideas] = await Promise.all([
         User.find({
-        $or: [
-            { name: regex },
-            { username: regex },
-        ]
-        }).select('name username image headLine'),
+            $or: [
+                { name: regex },
+                { username: regex },
+            ]
+        }).select('name username image headLine')
+            .limit(6),
 
         Idea.find({
-        $or: [
-            { title: regex },
-            { description: regex },
-            { problem: regex },
-            { tags: { $elemMatch: regex } },
-        ]
+            $or: [
+                { title: regex },
+                { description: regex },
+                { problem: regex },
+                { tags: { $in: [regex] } },
+            ]
         }).populate('author', 'name username image')
+        .limit(6)
     ])
-
+  
     return NextResponse.json({ users, ideas })
 }
