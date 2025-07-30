@@ -172,6 +172,7 @@ export function SearchInput() {
                 {results.ideas.map((ideas: Idea) => (
                     <Link
                       key={ideas._id}
+                      onClick={() => setOpen(false)}
                       href={`/idea/${ideas._id}`}
                       className="flex flex-col mx-2 gap-1 px-4 py-2 cursor-pointer rounded-sm text-sm hover:bg-muted hover:text-foreground transition-colors"
                       >

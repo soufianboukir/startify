@@ -8,4 +8,5 @@ export type User = {
     bio?: string
     website?: string
     role?: 'admin' | 'user';
+    createdAt?: Date
 }
