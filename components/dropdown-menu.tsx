@@ -41,6 +41,11 @@ export function ProfileMenu({ session }: { session: Session }) {
                         Saved items
                     </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link href={`/inbox`}>
+                        Messages
+                    </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer" asChild>
                     <Link href={`/settings`}>
                         Account settings
@@ -59,7 +64,11 @@ export function ProfileMenu({ session }: { session: Session }) {
                     Github
                 </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href={`/support`}>
+                    Support
+                </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem disabled>API</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">

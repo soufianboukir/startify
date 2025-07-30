@@ -51,10 +51,10 @@ const Footer = () =>{
                     <Image src={'/icons/startify-logo.png'} width={25} height={25} alt='startify-logo'/>
                     <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Home</Link>
                     <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Docs</Link>
-                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Developer</Link>
-                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Privacy policy</Link>
-                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Terms of service</Link>
-                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Contact</Link>
+                    <Link href={'https://soufianboukir.com'} className='dark:hover:text-white duration-200 hover:text-black'>Developer</Link>
+                    <Link href={'/privacy-policy'} className='dark:hover:text-white duration-200 hover:text-black'>Privacy policy</Link>
+                    <Link href={'/terms-of-service'} className='dark:hover:text-white duration-200 hover:text-black'>Terms of service</Link>
+                    <Link href={'/support'} className='dark:hover:text-white duration-200 hover:text-black'>Support</Link>
                 </div>
 
                 <div>
