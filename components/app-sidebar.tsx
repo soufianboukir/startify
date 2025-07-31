@@ -39,8 +39,8 @@ const data = {
       icon: Users,
     },
     {
-      title: "Reported items",
-      url: "/reported",
+      title: "Reported Items",
+      url: "/reported-items",
       icon: Flag,
     },
     {
@@ -60,7 +60,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild>
               <Link className='flex gap-2 items-center cursor-pointer' href={'/feed'}>
                   <Image src={'/icons/startify-logo.png'} width={30} height={30} alt='Startify logo' className='rounded-xs'/>
-                  <div className='hidden flex-col lg:flex'>
+                  <div className='flex flex-col'>
                       <span className='font-semibold'>Startify</span>
                       <span className='text-xs'>Connecting worldwide ideas</span>
                   </div>

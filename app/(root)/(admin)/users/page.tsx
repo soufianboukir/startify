@@ -16,14 +16,15 @@ import { User } from '@/interfaces/user'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight, Loader } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Eye, Loader } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { DeleteDialog } from '@/components/delete-dialog'
 
 
 const  Users = ()  => {
     const [users, setUsers] = useState<User[]>([])
     const [page, setPage] = useState(1)
-    const [loading,setLoading] = useState(false)
+    const [loading,setLoading] = useState(true)
     const [totalPages,setTotalPages] = useState(0)
     const [searchInput,setSearchInput] = useState('')
     const [searchLoading,setSearchLoading] = useState(false)
@@ -94,7 +95,7 @@ const  Users = ()  => {
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Headline</TableHead>
-                    <TableHead className="text-right">Joined at</TableHead>
+                    <TableHead>Joined at</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -104,11 +105,11 @@ const  Users = ()  => {
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.headLine}</TableCell>
-                    <TableCell className="text-right">{format(user.createdAt!,'dd-MM-yyyy')}</TableCell>
+                    <TableCell>{format(user.createdAt!,'dd-MM-yyyy')}</TableCell>
                     <TableCell className="text-right">
                         <div className='flex gap-2 items-center justify-center'>
-                            <Link href={`/${user.username}`} className='text-blue-500'>View</Link>
-                            <Link href={`/${user.username}`} className='text-red-500'>Delete</Link>
+                            <Link href={`/${user.username}`} className='text-blue-500 flex items-center gap-2'><Eye className='w-4 h-4'/> View</Link>
+                            <DeleteDialog type='User' userId={user._id}/>
                         </div>
                     </TableCell>
                 </TableRow>

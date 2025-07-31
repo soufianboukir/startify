@@ -23,11 +23,12 @@ type DeleteDialogProps = {
     ideaId?: string
     commentId?: string
     followerId?: string
+    userId?: string
     type?: 'Comment' | 'Idea' | 'Follower' | 'User'
 }
 
 
-export function DeleteDialog({ ideaId, commentId, followerId, type }: DeleteDialogProps) {
+export function DeleteDialog({ ideaId, commentId, followerId, userId, type }: DeleteDialogProps) {
 
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
@@ -57,6 +58,13 @@ export function DeleteDialog({ ideaId, commentId, followerId, type }: DeleteDial
                 const res = await api.delete(`/user/follow/removeFollower/${followerId}`)
                 if (res.status === 200) {
                     toast.success('Follower has been deleted')
+                    setOpen(false)
+                    setInput('')
+                }
+            }else if( type === 'User'){
+                const res = await api.delete(`/admin/users/delete?id=${userId}`)
+                if (res.status === 200) {
+                    toast.success('User has been deleted')
                     setOpen(false)
                     setInput('')
                 }
