@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import {
+  Delete,
   Flag,
-  LayoutDashboard,
   ShieldUser,
   Users,
 } from "lucide-react"
@@ -28,12 +28,6 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: LayoutDashboard,
-      isActive: true,
-    },
-    {
       title: "Users",
       url: "/users",
       icon: Users,
@@ -47,6 +41,11 @@ const data = {
       title: "Admins",
       url: "/admins",
       icon: ShieldUser,
+    },
+    {
+      title: "Requests",
+      url: "/requests",
+      icon: Delete,
     },
   ],
 }

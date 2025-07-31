@@ -20,7 +20,7 @@ const Redirecting = () => {
     }
 
     if(session?.user.role === 'admin'){
-        router.push('/dashboard')
+        router.push('/users')
     }
 
     if(status === 'unauthenticated'){
