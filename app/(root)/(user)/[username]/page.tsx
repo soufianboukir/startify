@@ -3,6 +3,7 @@ import { FollowButton } from '@/components/follow-btn'
 import { FollowingFollowers } from '@/components/following-followers-dialog'
 import { IdeaCard } from '@/components/idea-card'
 import { MessageButton } from '@/components/message-btn'
+import { ReportDialog } from '@/components/report-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { dbConnection } from '@/config/db'
 import { Follower as FollowerInterface, Following } from '@/interfaces/follower'
@@ -124,6 +125,11 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         {
                             !isCurrentUser && (
                                 <MessageButton username={user.username}/>
+                            )
+                        }
+                        {
+                            !isCurrentUser && (
+                                <ReportDialog userId={user._id} type='User'/>
                             )
                         }
                     </div>

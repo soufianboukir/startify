@@ -92,15 +92,15 @@ const  ReportedIdeas = ()  => {
                                 report.reportedIdea && (
                                     <>
                                         <Link href={`/idea/${report.reportedIdea._id}`} className='text-blue-500 flex items-center gap-2'><Eye className='w-4 h-4'/> View</Link>
-                                        <DeleteDialog type='Idea' userId={report.reportedIdea._id}/>
+                                        <DeleteDialog type='Idea' ideaId={report.reportedIdea._id}/>
                                     </>
                                 )
                                }
                                {
                                 report.reportedUser && (
                                     <>
-                                        <Link href={`/idea/${report.reportedUser._id}`} className='text-blue-500 flex items-center gap-2'><Eye className='w-4 h-4'/> View</Link>
-                                        <DeleteDialog type='Idea' userId={report.reportedUser._id}/>
+                                        <Link href={`/${report.reportedUser.username}`} className='text-blue-500 flex items-center gap-2'><Eye className='w-4 h-4'/> View</Link>
+                                        <DeleteDialog type='User' userId={report.reportedUser._id}/>
                                     </>
                                 )
                                }
@@ -122,7 +122,7 @@ const  ReportedIdeas = ()  => {
                                                 </DialogHeader>
                                             </DialogContent>
                                         </Dialog>
-                                        <DeleteDialog type='Comment' userId={report.reportedComment._id}/>
+                                        <DeleteDialog type='Comment' commentId={report.reportedComment._id}/>
                                     </>
                                 )
                                }

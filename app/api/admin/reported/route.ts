@@ -3,7 +3,9 @@ import { authOptions } from '@/lib/auth'
 import Report from '@/models/report'
 import { getServerSession } from 'next-auth/next'
 import { NextRequest, NextResponse } from 'next/server'
-
+import '@/models/idea'
+import '@/models/comment'
+import '@/models/user'
 export async function GET(req: NextRequest) {
     const session = await getServerSession(authOptions)
 
@@ -30,9 +32,9 @@ export async function GET(req: NextRequest) {
         .limit(limit)
         .sort({ createdAt: -1 }) 
         .populate('reportedBy', 'name username')
-        .populate('reportedUser')
-        .populate('reportedIdea')
-        .populate('reportedComment')
+        .populate('reportedUser', 'name username')
+        .populate('reportedIdea', 'title')
+        .populate('reportedComment', 'content')
 
         const totalReports = await Report.countDocuments({
             $or: [

@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Types, Model } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IReport extends Document {
     reportedUser?: Types.ObjectId;
@@ -23,5 +23,5 @@ const ReportSchema = new Schema<IReport>(
 
 
 
-const Report: Model<IReport> = mongoose.models.Report || mongoose.model<IReport>('Report', ReportSchema);
+const Report = mongoose.models.Report || mongoose.model<IReport>('Report', ReportSchema);
 export default Report;
