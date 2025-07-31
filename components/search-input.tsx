@@ -153,7 +153,7 @@ export function SearchInput() {
                     <Link
                       key={user._id}
                       onClick={() => setOpen(false)}
-                      href={`/user/${user.username}`}
+                      href={`/${user.username}`}
                       className="flex items-center mx-2 gap-3 px-4 py-2 cursor-pointer rounded-sm text-sm hover:bg-muted hover:text-foreground transition-colors"
                       >
                         <Avatar className="w-7 h-7">

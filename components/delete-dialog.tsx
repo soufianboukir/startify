@@ -23,7 +23,7 @@ type DeleteDialogProps = {
     ideaId?: string
     commentId?: string
     followerId?: string
-    type?: 'Comment' | 'Idea' | 'Follower'
+    type?: 'Comment' | 'Idea' | 'Follower' | 'User'
 }
 
 

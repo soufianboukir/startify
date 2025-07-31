@@ -114,11 +114,28 @@ export default function MessagesPage() {
     messagesEndRef.current?.scrollIntoView?.({ behavior: 'smooth' })
   }, [messages])
 
+  useEffect(() =>{
+    if(username === '') return
+    const getOtherUserInfo = async () =>{
+        try{
+            const res = await api.get(`/user?username=${username}`)        
+            if(res.status === 200){
+                setUser(res.data.user)
+            }
+        }catch{
+
+        }finally{
+            
+        }
+    }
+    getOtherUserInfo()
+  },[username])
+  
   useEffect(() => {
-    if (!selectedConversation && conversations.length > 0) {
+    if (!selectedConversation && conversations.length > 0 && !user) {
       setSelectedConversation(conversations[0])
     }
-  }, [conversations, selectedConversation])
+  }, [conversations, selectedConversation,user])
 
 
   useEffect(() => {
@@ -211,23 +228,6 @@ export default function MessagesPage() {
       setSending(false)
     }
   }
-
-  useEffect(() =>{
-    if(username === '') return
-    const getOtherUserInfo = async () =>{
-        try{
-            const res = await api.get(`/user?username=${username}`)        
-            if(res.status === 200){
-                setUser(res.data.user)
-            }
-        }catch{
-
-        }finally{
-            
-        }
-    }
-    getOtherUserInfo()
-  },[username])
 
 
 

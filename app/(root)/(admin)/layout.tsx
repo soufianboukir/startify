@@ -1,4 +1,3 @@
-'use client'
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { ProfileMenu } from "@/components/dropdown-menu";
@@ -6,22 +5,17 @@ import { SearchInput } from "@/components/search-input";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
-export const iframeHeight = "800px"
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 
-export default function RootLayout({
+export default async function RootLayout({
         children,
     }: Readonly<{
         children: React.ReactNode;
     }>) {
-        const pathName = usePathname()
-        const currentPath = pathName.startsWith('/') ? pathName.slice(1) : pathName
-        const { data: session, status }  = useSession()
+        const session = await getServerSession(authOptions)
 
-        if( status === 'loading') return null
         return (
-            
             <html lang="en">
                 <body className="">
                     <main className="">
@@ -35,7 +29,6 @@ export default function RootLayout({
                                     orientation="vertical"
                                     className="mr-2 data-[orientation=vertical]:h-4"
                                     />
-                                    <span className="text-xl font-medium">{currentPath}</span>
                                 </div>
                                 <div className="flex items-center gap-2 justify-end mr-3">
                                     <SearchInput />
