@@ -78,15 +78,15 @@ export const PasswordR = () => {
 
                     <div className="flex flex-col gap-4 rounded-md overflow-hidden w-[100%] md:w-[40%]">
                         <div>
-                            <Input type='text' value={oldPassword} placeholder='Old password' onChange={(e) => setOldPassword(e.target.value)}/>
+                            <Input type='password' value={oldPassword} placeholder='Old password' onChange={(e) => setOldPassword(e.target.value)}/>
                             {errors.oldPassword && <p className='text-red-500 text-sm'>{errors.oldPassword}</p>}
                         </div>
                         <div>
-                            <Input type='text' value={password} placeholder='New password' onChange={(e) => setPassword(e.target.value)}/>
+                            <Input type='password' value={password} placeholder='New password' onChange={(e) => setPassword(e.target.value)}/>
                             {errors.password && <p className='text-red-500 text-sm'>{errors.password}</p>}
                         </div>
                         <div>
-                            <Input type='text' value={r_password} placeholder='Retype new password' onChange={(e) => setR_password(e.target.value)}/>
+                            <Input type='password' value={r_password} placeholder='Retype new password' onChange={(e) => setR_password(e.target.value)}/>
                             {errors.r_password && <p className='text-red-500 text-sm'>{errors.r_password}</p>}
                         </div>
                     </div>

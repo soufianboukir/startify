@@ -132,10 +132,10 @@ export default function MessagesPage() {
   },[username])
   
   useEffect(() => {
-    if (!selectedConversation && conversations.length > 0 && !user) {
+    if (!selectedConversation && conversations.length > 0 && !user && !username) {
       setSelectedConversation(conversations[0])
     }
-  }, [conversations, selectedConversation,user])
+  }, [conversations, selectedConversation,user, username])
 
 
   useEffect(() => {

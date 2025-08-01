@@ -58,6 +58,15 @@ export function ProfileMenu({ session }: { session: Session }) {
                         Notifications
                     </Link>
                 </DropdownMenuItem>
+                {
+                    session.user.role === 'admin' && (
+                        <DropdownMenuItem asChild className="cursor-pointer">
+                            <Link href={`/users`}>
+                                Dashboard
+                            </Link>
+                        </DropdownMenuItem>
+                    )
+                }
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />

@@ -8,6 +8,9 @@ import Idea from '@/models/idea'
 import Comment from '@/models/comment'
 import Save from '@/models/save'
 import Notification from '@/models/notification'
+import DeleteRequest from '@/models/deleteRequest'
+import Message from '@/models/message'
+import Conversation from '@/models/conversation'
 
 export async function DELETE(req: NextRequest) {
     try {
@@ -37,9 +40,20 @@ export async function DELETE(req: NextRequest) {
         await Notification.deleteMany({
           $or: [{ fromUser: userId }, { toUser: userId }],
         });
-
+        await DeleteRequest.deleteMany({ user: userId})
         await Idea.updateMany({}, { $pull: { upVotes: userId, downVotes: userId } });
         await Comment.updateMany({}, { $pull: { likes: userId } });
+        await Message.deleteMany({ sender: userId })
+
+        const userConversations = await Conversation.find({
+        participants: userId,
+        }).select('_id')
+
+        const conversationIds = userConversations.map(conv => conv._id)
+
+        await Conversation.deleteMany({ _id: { $in: conversationIds } })
+
+        await Message.deleteMany({ conversation: { $in: conversationIds } })
 
         return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 })
     } catch (error) {

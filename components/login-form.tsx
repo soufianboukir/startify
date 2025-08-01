@@ -25,6 +25,7 @@ export function LoginForm() {
     const [error,setError] = useState('')
     const searchParams = useSearchParams();
     const router = useRouter()
+    const [success,setSuccess] = useState(false)
     const [formData,setFormData] = useState({
         email: '',
         password: '',
@@ -62,6 +63,7 @@ export function LoginForm() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
+        setSuccess(false)
         setError("");
 
         try {
@@ -69,14 +71,15 @@ export function LoginForm() {
                 redirect: false,
                 email: formData.email,
                 password: formData.password,
-            });            
+            });              
         
             if (result?.error) {
-                if(result.error === 'CredentialsSignin'){
+                if(result.error === 'CredentialsSignin' || result.error === 'Invalid-credentials'){
                     setError('Invalid email or password.');
                 }
             } else {
-                router.push("/redirecting"); 
+                setSuccess(true)
+                router.push("/redirecting");
             }
         } catch (err) {
             if (err instanceof Error) {
@@ -103,6 +106,9 @@ export function LoginForm() {
                 </CardDescription>
                 {
                     error && <div className="text-red-600 text-center">{error}</div>
+                }
+                {
+                    success && <div className="text-green-600 text-center">Success! logging in...</div>
                 }
             </CardHeader>
             <CardContent>

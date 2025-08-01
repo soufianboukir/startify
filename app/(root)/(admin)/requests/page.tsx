@@ -12,16 +12,15 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { api } from '@/config/api'
-import { User } from '@/interfaces/user'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { DeleteDialog } from '@/components/delete-dialog'
 import { Eye, Loader } from 'lucide-react'
-import { AdminForm } from '@/components/admin-form'
+import { DeleteRequest } from '@/interfaces/deleteRequest'
 
 
-const  Admins = ()  => {
-    const [admins, setAdmins] = useState<User[]>([])
+const  Requests = ()  => {
+    const [users, serUsers] = useState<DeleteRequest[]>([])
     const [loading,setLoading] = useState(true)
 
     useEffect(() => {
@@ -30,7 +29,7 @@ const  Admins = ()  => {
             try{
                 const res = await api.get(`/admin/delete-requests`)
                 if(res.status === 200){
-                    setAdmins(res.data.admins)
+                    serUsers(res.data.users)
                 }
             }catch{
 
@@ -47,7 +46,6 @@ const  Admins = ()  => {
                         </div>
   return (
    <div> 
-    <AdminForm />
         <Table>
             <TableCaption>A list of all delete requests.</TableCaption>
             <TableHeader>
@@ -60,17 +58,17 @@ const  Admins = ()  => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {admins.map((admin) => (
-                <TableRow key={admin._id}>
-                    <TableCell className="font-medium">{admin._id}</TableCell>
-                    <TableCell>{admin.name}</TableCell>
-                    <TableCell>{admin.email}</TableCell>
-                    <TableCell>{admin.headLine}</TableCell>
-                    <TableCell>{format(admin.createdAt!,'dd-MM-yyyy')}</TableCell>
+                {users.map((deleteRequest) => (
+                <TableRow key={deleteRequest?._id}>
+                    <TableCell className="font-medium">{deleteRequest.user._id}</TableCell>
+                    <TableCell>{deleteRequest?.user.name}</TableCell>
+                    <TableCell>{deleteRequest?.user.email}</TableCell>
+                    <TableCell>{deleteRequest?.user.headLine || 'not setted yet'}</TableCell>
+                    <TableCell>{format(deleteRequest.createdAt!,'dd-MM-yyyy')}</TableCell>
                     <TableCell className="text-right">
                         <div className='flex gap-2 items-center justify-center'>
-                            <Link href={`/${admin.username}`} className='text-blue-500 flex items-center gap-2'><Eye className='w-4 h-4'/> View</Link>
-                            <DeleteDialog type='Admin' userId={admin._id}/>
+                            <Link href={`/${deleteRequest.user.username}`} className='text-blue-500 flex items-center gap-2'><Eye className='w-4 h-4'/> View</Link>
+                            <DeleteDialog type='User' userId={deleteRequest.user._id}/>
                         </div>
                     </TableCell>
                 </TableRow>
@@ -79,7 +77,7 @@ const  Admins = ()  => {
             <TableFooter>
                 <TableRow>
                 <TableCell colSpan={6} className="text-right">
-                    Total Users: {admins.length}
+                    Total Requests: {users.length}
                 </TableCell>
                 </TableRow>
             </TableFooter>
@@ -89,4 +87,4 @@ const  Admins = ()  => {
 }
 
 
-export default Admins;
+export default Requests;

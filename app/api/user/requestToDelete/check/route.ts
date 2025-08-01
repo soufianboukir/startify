@@ -7,19 +7,17 @@ import DeleteRequest from '@/models/deleteRequest'
 export async function GET() {
     const session = await getServerSession(authOptions)
 
-    if (!session || session.user?.role !== 'admin') {
+    if (!session || !session.user || !session.user.id) {
         return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
     await dbConnection()
 
-    try {
-        const requests = await DeleteRequest.find()
-            .populate('user', 'username headLine name email')
-            .sort({ createdAt: -1 })
+    const existingRequest = await DeleteRequest.findOne({ user: session.user.id })
 
-        return NextResponse.json({ users: requests }, { status: 200 })
-    } catch {
-        return NextResponse.json({ message: 'Failed to fetch requests' }, { status: 500 })
+    if (existingRequest) {
+        return NextResponse.json({ exists: true, request: existingRequest })
     }
+
+    return NextResponse.json({ exists: false }, {status: 404})
 }

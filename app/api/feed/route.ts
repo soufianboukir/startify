@@ -20,7 +20,7 @@ export const GET = async (req: NextRequest) => {
       const userId = session.user.id
 
       const page = parseInt(pageParam || '1')
-      const limit = parseInt(limitParam || '2')
+      const limit = parseInt(limitParam || '6')
       const skip = (page - 1) * limit
 
       const following = await Follower.find({ followerUser: userId }).select('followingUser')

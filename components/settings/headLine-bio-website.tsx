@@ -119,7 +119,7 @@ export const OtherDetails = ({ session }: { session: Session }) => {
                                     type='text'
                                     readOnly
                                     onChange={() => {}}
-                                    defaultValue={"82934j23iu89535"}
+                                    defaultValue={session.user.id}
                                     className='pr-10 cursor-pointer'
                                 />
                                 <button

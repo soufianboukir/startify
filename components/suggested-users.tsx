@@ -46,7 +46,7 @@ export const SuggestedUsers = () => {
                                 </Avatar>
                                 <div className="flex flex-col">
                                     <Link className="font-medium text-sm hover:underline duration-200" href={`/${user.username}`}>{user.name}</Link>
-                                    <span className="text-xs text-muted-foreground">{user.headLine}</span>
+                                    <span className="text-xs text-muted-foreground">{user.headLine || user.username}</span>
                                 </div>
                             </div>
 

@@ -6,15 +6,15 @@ export default function RootLayout({
         children: React.ReactNode;
     }>) {
         return (
-        <html lang="en">
-            <body className="h-[80vh] flex flex-col">
-                <Header />
-                    <main className="flex-1 min-h-[90vh] pt-20">
-                        {children}
-                    </main>
-                <Footer />
+        <html lang="en" className="h-full">
+            <body className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-1 pt-20">
+                {children}
+              </main>
+              <Footer />
             </body>
-        </html>
+          </html>
     );
 }
   

@@ -60,7 +60,7 @@ export const ModifyUsername = ({ session }: { session: Session }) => {
 
                     <div className="flex items-center border rounded-md overflow-hidden w-[100%] md:w-[40%]">
                         <span className="dark:text-white/50 px-3 text-sm select-none border-r">
-                            startify.vercel.three.app.com/
+                            {process.env.NEXT_PUBLIC_APP_URL}/
                         </span>
                         <Input
                             onChange={(e) => setUsername(e.target.value)}
