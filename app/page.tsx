@@ -1,11 +1,13 @@
-import Hero from "@/components/sections/hero/default";
-import Navbar from "@/components/sections/navbar/default";
+import Example from "@/components/hero";
+import { HowItWorks } from "@/components/how-it-works";
+import { Navbar } from "@/components/navbar";
 
 export default function Home() {
     return (
       <div>
         <Navbar />
-        <Hero />
+        <Example />
+        <HowItWorks />
       </div>
     );
 }
