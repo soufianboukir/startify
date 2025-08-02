@@ -22,15 +22,15 @@ export const Header = () => {
 
     const fetchUnseenMssgs = async () =>{
         try{
-        setLoading(true)
-        const res = await api.get('/messages/unseen')
+            setLoading(true)
+            const res = await api.get('/messages/unseen')
         if(res.status === 200){
             setUnseenConvs(res.data.unseenConversations)
         }
         }catch{
         
         }finally{
-        setLoading(false)
+            setLoading(false)
         }
     }
 

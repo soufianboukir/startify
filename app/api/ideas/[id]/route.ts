@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import Idea from '@/models/idea'
 import Comment from '@/models/comment'
 import Report from '@/models/report'
@@ -7,8 +7,56 @@ import { authOptions } from '@/lib/auth'
 import { dbConnection } from '@/config/db'
 import { Types } from 'mongoose'
 
+
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session || !session.user?.id) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        await dbConnection();
+
+        const { id } = await params
+        if (!id) {
+            return NextResponse.json({ error: "Missing idea id" }, { status: 400 });
+        }
+
+        const body = await req.json();
+        const { title, description, problem, tags, isOpenToCollab, category } = body.idea || {};
+
+        if (!title || !description || !category || !problem || !Array.isArray(tags)) {
+            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        }
+
+        const idea = await Idea.findById(id);
+        if (!idea) {
+            return NextResponse.json({ error: "Idea not found" }, { status: 404 });
+        }
+
+        if (idea.author.toString() !== session.user.id) {
+            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+        }
+
+        idea.title = title;
+        idea.description = description;
+        idea.problem = problem;
+        idea.tags = tags;
+        idea.isOpenToCollab = isOpenToCollab;
+        idea.category = category;
+
+        await idea.save();
+
+        return NextResponse.json({ message: "Idea updated", idea });
+    } catch (err) {
+        console.error("Failed to update idea:", err);
+        return NextResponse.json({ error: "Server error" }, { status: 500 });
+    }
+}
+
+
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
     try {
