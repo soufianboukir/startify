@@ -6,6 +6,7 @@ import { IdeaForm } from '@/components/idea-form'
 import { Notifications } from '@/components/notifications'
 import { SearchInput } from '@/components/search-input'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { Button } from '@/components/ui/button'
 import { api } from '@/config/api'
 import { Mail } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -68,7 +69,7 @@ export const Header = () => {
                 <Notifications />
                 <IdeaForm />
                 {
-                    session && <ProfileMenu session={session}/>
+                    session ? <ProfileMenu session={session}/> : <Button variant={'outline'}>Sign in</Button>
                 }
                 <ThemeToggle />
             </div>
