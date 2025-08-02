@@ -1,6 +1,7 @@
 # Startify
 
 **Discover and share SaaS, business, startup... ideas, get real feedback, and find collaborators to bring your product to life.**
+<img width="2557" height="1263" alt="feed" src="https://github.com/user-attachments/assets/f443c85d-0c0d-4543-81ff-df8f47c55580" />
 
 ## About
 
