@@ -1,37 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Startify
 
-## Getting Started
+**Discover and share SaaS, business, startup... ideas, get real feedback, and find collaborators to bring your product to life.**
 
-First, run the development server:
+## About
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Startify is a collaborative platform designed for innovators and entrepreneurs to post their SaaS, business, and startup ideas, receive valuable feedback, and find collaborators to help bring their products to life. The platform emphasizes community interaction, real-time communication, and comprehensive user and content management to foster productive engagement and innovation.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework:** Next.js 15  
+- **Language:** TypeScript  
+- **Database:** MongoDB (via Mongoose)  
+- **Authentication:** NextAuth (Google OAuth)  
+- **Styling:** Tailwind CSS  
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### User Authentication & Profile Management
+- Secure login with Google OAuth  
+- Reset password functionality  
+- Manage profile details including:  
+  - Username  
+  - Avatar  
+  - Full name  
+  - Bio  
+  - Website URL  
+- Password management  
+- Request to delete account  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Idea Management
+- Post new ideas with title, description, and tags  
+- Edit and delete ideas  
+- Save ideas for later reference  
+- Upvote and downvote ideas  
+- Comment on ideas with support for likes on comments  
+- Report inappropriate ideas and comments  
 
-## Deploy on Vercel
+### Social Interaction
+- Follow and unfollow users  
+- Report users for misconduct  
+- Real-time communication/chat between users  
+- Manage notifications for applications, comments, votes, and messages  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Search & Discovery
+- Search functionality for users and ideas
+- View saved ideas and notifications
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# startify
+### Admin Panel
+- Manage users and admins  
+- Review and manage reported ideas, comments, and users  
+- Handle user deletion requests  
+
+## Installation
+
+1. Clone the repository  
+   ```bash
+   git clone https://github.com/soufianboukir/startify.git
+   cd startify
+
+2. cp .env.example .env and configure it!
+
+3. Run application
+  ```bash
+    npm run dev
+  ```
+
+built with ❤️ by **soufian**.
+
