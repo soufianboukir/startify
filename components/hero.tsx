@@ -10,6 +10,7 @@ import {
     UserPlus,
     Flag,
   } from 'lucide-react'
+import { BackgroundBeams } from './ui/background-beams'
   
   export const features = [
     {
@@ -65,13 +66,12 @@ export default function Example() {
                     className="absolute inset-0 -z-10 flex items-center justify-center overflow-hidden"
                     >
                 <div
-                    className="w-[60rem] h-[60rem] rounded-full bg-gradient-to-tr from-[#ffffff] to-[#777777] dark:from-[#02001d] dark:to-[#424242]
-                            blur-3xl opacity-30 animate-pulse
-                            transition-transform duration-[3500ms] ease-in-out"
+                    className="w-[60rem] h-[60rem] rounded-full bg-gradient-to-tr from-[#ffffff] to-[#9f9f9f] dark:from-[#02001d] dark:to-[#484848]
+                            blur-3xl opacity-30"
                 />
                 </div>
 
-
+                <BackgroundBeams />
 
                 <div className="mx-auto max-w-6xl lg:py-40 py-30 dark:text-white">
                     <div className="hidden sm:mb-8 sm:flex sm:justify-center">
@@ -84,10 +84,10 @@ export default function Example() {
                         </div>
                     </div>
                     <div className="text-center">
-                        <h1 className="text-6xl font-semibold tracking-tight text-balance text-gray-900 dark:text-white">
+                        <h1 className="md:text-6xl text-4xl font-semibold tracking-tight text-balance text-gray-900 dark:text-white">
                             Everything You Need <br /> Build, Share, and Connect
                         </h1>
-                        <p className="mt-8 text-gray-500 text-lg dark:text-white">
+                        <p className="mt-8 text-gray-500 text-sm md:text-lg dark:text-white">
                             Startify enables you to share your innovative ideas, receive constructive feedback from a vibrant community, and collaborate with like-minded creators. Whether you{"'"}re posting new concepts, managing your profile, or connecting through real-time messaging, everything you need to turn your vision into reality is here — all in one accessible, easy-to-use space.
                         </p>
 
