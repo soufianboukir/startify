@@ -4,13 +4,19 @@ import { Loader, UserMinus, UserPlus } from 'lucide-react'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
+import { useSession } from 'next-auth/react'
 
 export const FollowButton = ({ userId, isFollowing, onlySVG }: { userId: string, isFollowing: boolean, onlySVG?: boolean }) => {
     const [loading,setLoading] = useState(false)
     const [isFollowingState,setIsFollowingState] = useState(isFollowing)
+    const { data: session, status } = useSession()
 
     const toggleFollow = async () =>{
         try{
+            if (!session?.user.id) {
+                toast.error('You must be logged in to follow this user.')
+                return
+            }
             setLoading(true)
             const res = await api.post('/user/follow',{ followingId: userId})
             if(res.status === 200){
@@ -26,6 +32,8 @@ export const FollowButton = ({ userId, isFollowing, onlySVG }: { userId: string,
             setLoading(false)
         }
     }
+
+    if (status === 'loading') return null
     return (
         <Button className='bg-blue-600 text-white px-2 h-7 rounded-xs flex gap-1 items-center font-medium text-xs cursor-pointer hover:bg-blue-700 duration-200' disabled={loading} onClick={toggleFollow}>
             {

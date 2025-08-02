@@ -48,10 +48,10 @@ export const Footer = () => {
                 <div>
                 <h3 className="text-lg font-semibold mb-3">Explore</h3>
                 <ul className="space-y-2 text-sm text-gray-400">
-                    <li><Link href="/ideas" className="hover:">Browse Ideas</Link></li>
-                    <li><Link href="/submit" className="hover:">Submit Idea</Link></li>
-                    <li><Link href="/feedback" className="hover:">Get Feedback</Link></li>
-                    <li><Link href="/collaborators" className="hover:">Find Collaborators</Link></li>
+                    <li><Link href="/feed" className="hover:">Browse Ideas</Link></li>
+                    <li><Link href="/settings" className="hover:">Settings</Link></li>
+                    <li><Link href="/saved" className="hover:">Saved items</Link></li>
+                    <li><Link href="/notifications" className="hover:">Notifications</Link></li>
                 </ul>
                 </div>
 
@@ -87,7 +87,7 @@ export const Footer = () => {
                 </div>
             </div>
 
-            <div className="mt-10 border-t dark:border-muted py-8 text-sm text-gray-500 text-center">
+            <div className="mt-10 border-t dark:border-muted py-8 text-sm dark:text-white/80 text-black/80 text-center">
                 &copy; {new Date().getFullYear()} Startify. All rights reserved.
             </div>
         </footer>

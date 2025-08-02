@@ -5,6 +5,7 @@ import Follower from '@/models/follower'
 import Idea from '@/models/idea'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import User from '@/models/user'
 
 export const GET = async () => {
   try {
@@ -13,7 +14,12 @@ export const GET = async () => {
     
     const session = await getServerSession(authOptions)
     if(!session || !session.user.id){
-        return NextResponse.json({message: 'Unauthorized'},{status: 401})
+        const users = await User.find({})
+            .sort({ createdAt: 1 })
+            .limit(6)
+            .select('_id name username image headLine')
+
+        return NextResponse.json({ users })
     }
 
     const userId = session.user.id

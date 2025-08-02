@@ -24,7 +24,7 @@ export async function sendWelcomeEmail({ to, name }: SendWelcomeEmailParams) {
                 <div style="padding: 30px; background: #fff;">
                     <p style="font-size: 16px; line-height: 1.5;">
                     Hi <strong>${name}</strong>,<br/><br/>
-                    We're thrilled to have you on board! Your journey to sharing and discovering amazing SaaS ideas starts now.
+                    We're thrilled to have you on board! Your journey to sharing and discovering amazing ideas starts now.
                     </p>
 
                     <p style="font-size: 16px; line-height: 1.5;">

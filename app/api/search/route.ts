@@ -2,16 +2,9 @@ import { NextResponse } from 'next/server'
 import User from '@/models/user'
 import Idea from '@/models/idea'
 import { dbConnection } from '@/config/db'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 
 export async function GET(req: Request) {
 
-    const session = await getServerSession(authOptions)
-
-    if( !session){
-        return NextResponse.json({message: "Unauthorized"}, { status: 500})
-    }
     const { searchParams } = new URL(req.url)
     const query = searchParams.get('query')?.trim()
 

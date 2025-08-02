@@ -23,7 +23,7 @@ export const Navbar = ({ session }: { session?: Session}) => {
                 </Link>
             </div>
 
-            <div className='flex gap-5 items-center text-sm font-medium'>
+            <div className='gap-5 items-center text-sm font-medium hidden lg:flex'>
                 <ScrollLink to='getting-started' smooth duration={500} className='cursor-pointer'>Getting started</ScrollLink>
                 <ScrollLink to='how-it-works' smooth duration={500} className='cursor-pointer'>How it works</ScrollLink>
                 <ScrollLink to='faqs' smooth duration={500} className='cursor-pointer'>FAQs</ScrollLink>
@@ -40,7 +40,7 @@ export const Navbar = ({ session }: { session?: Session}) => {
                         <Button variant={'outline'}>
                             <Link href={'/login'}>Sign in</Link>
                         </Button>
-                        <Button variant={'default'}>
+                        <Button variant={'default'} className='md:block hidden'>
                             <Link href={'/feed'}>Get started</Link>
                         </Button>
                     </>

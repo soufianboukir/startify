@@ -54,7 +54,7 @@ export default function SearchPage() {
                         ) : (
                         <div className="grid gap-4">
                             {results.users.map((user: User) => (
-                            <Link key={user._id} href={`/${user.username}`} className="flex items-start gap-4 border p-4 rounded-md hover:shadow-md transition justify-between">
+                            <Link key={user._id} href={`/${user.username}`} className="flex items-start gap-4 border p-4 rounded-md justify-between">
                                 <div className='flex gap-2 items-start'>
                                     <Avatar className="h-12 w-12">
                                         <AvatarImage src={user.image} />

@@ -108,7 +108,7 @@ export function SearchInput() {
           onClick={() => setOpen(true)}
           type="text"
           placeholder="Type somthing..."
-          className="md:[40%] w-[100%] px-3 py-1.5 rounded-md text-sm border border-muted bg-muted/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition cursor-pointer"
+          className="md:[50%] w-[100%] px-3 py-1.5 rounded-md text-sm border border-muted bg-muted/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition cursor-pointer"
         />
 
 

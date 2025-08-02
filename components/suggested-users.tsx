@@ -40,7 +40,7 @@ export const SuggestedUsers = () => {
                     users?.length > 0 && users.map((user) => (
                         <div key={user._id} className="flex justify-between">
                             <div className='flex items-center gap-2'>
-                                <Avatar className="w-7 h-7">
+                                <Avatar className="w-8 rounded-md h-8">
                                     <AvatarImage src={user.image || ''} />
                                     <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
                                 </Avatar>

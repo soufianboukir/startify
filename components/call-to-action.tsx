@@ -5,11 +5,11 @@ import Link from 'next/link'
 
 export default function CallToAction() {
   return (
-    <section className="px-[8%] h-[100vh] flex flex-col justify-center w-[70%] mx-auto text-center gap-8">
-        <h1 className="text-5xl font-semibold">
+    <section className="px-[8%] py-12 flex flex-col justify-center w-[70%] mx-auto text-center gap-8">
+        <h1 className="md:text-5xl text-2xl font-semibold">
             Share your next big idea. <br /> Get feedback. Find collaborators.
         </h1>
-        <p className="text-xl font-semibold">
+        <p className="md:text-xl font-semibold">
             Discover and share SaaS, business, and startup ideas — validate them with real feedback <br /> and connect with builders ready to bring them to life.
         </p>
 

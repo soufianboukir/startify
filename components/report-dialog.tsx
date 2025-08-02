@@ -14,6 +14,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { api } from "@/config/api"
 import { Flag, Loader } from "lucide-react"
+import { useSession } from "next-auth/react"
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -46,9 +47,13 @@ export function ReportDialog({ ideaId, commentId, userId, type }: DeleteDialogPr
     const [open, setOpen] = useState(false)
     const [reason,setReason] = useState('')
     const disableBtn = reason === ''
-
+    const { data: session, status } = useSession()
 
     const handleSubmit = async () => {
+        if( !session?.user.id ) {
+            toast.error('You must be logged in to report')
+            return
+        }
         if (disableBtn) return
         setLoading(true)
 
@@ -65,7 +70,7 @@ export function ReportDialog({ ideaId, commentId, userId, type }: DeleteDialogPr
             setLoading(false)
         }
     }
-
+    if( status === 'loading') return null
     return (
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
             <form>

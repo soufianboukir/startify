@@ -20,7 +20,7 @@ export const IdeaCard = ({ idea, isCurrentUser }: { idea: Idea, isCurrentUser: b
                         </Avatar>
                         <div className='flex flex-col'>
                             <Link className='font-medium text-zinc-900 dark:text-zinc-50 duration-100' href={`/${idea.author.username}`}>{idea.author.name}</Link>
-                            <span className='text-xs text-zinc-500 dark:text-zinc-400'>@{idea.author.username}</span>
+                            <span className='text-xs text-zinc-500 dark:text-zinc-400'>{idea.author.headLine || idea.author.username}</span>
                         </div>
                     </div>
 

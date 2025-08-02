@@ -133,7 +133,7 @@ export default function Testimonials() {
     const bottom = duplicatedTestimonials.slice(10, 30);
   
     return (
-      <div className="w-full max-w-5xl mx-auto" id='what-people-say'>
+      <div className="w-full max-w-5xl mx-auto h-[100vh]" id='what-people-say'>
         <div className="text-center mb-12 px-4">
           <h2 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl mb-4">
             What People Say
@@ -144,8 +144,8 @@ export default function Testimonials() {
         </div>
   
         <div className="flex flex-col gap-10 overflow-hidden py-8 relative">
-          <div className="absolute inset-y-0 left-0 w-60 bg-gradient-to-r from-background to-transparent z-20 rounded-r-full" />
-          <div className="absolute inset-y-0 right-0 w-60 bg-gradient-to-l from-background to-transparent z-20 rounded-l-full" />
+          <div className="md:absolute inset-y-0 left-0 w-60 bg-gradient-to-r from-background to-transparent z-20 rounded-r-full" />
+          <div className="md:absolute inset-y-0 right-0 w-60 bg-gradient-to-l from-background to-transparent z-20 rounded-l-full" />
   
           {[top, bottom].map((group, idx) => (
             <div

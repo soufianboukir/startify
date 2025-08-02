@@ -80,10 +80,9 @@ export const Footer = () =>{
     return (
         <div className='bg-background py-8 w-full border-t border-gray-200 dark:border-muted/90'>
             <div className='flex md:flex-row gap-10 md:gap-0 flex-col justify-between dark:text-white/50 text-black/50 text-sm md:w-[80%] lg:w-[70%] mx-auto w-[90%] items-center'>
-                <div className='flex flex-col md:flex-row items-center gap-3'>
+                <div className='flex flex-col md:flex-row items-center gap-5'>
                     <Image src={'/icons/startify-logo.png'} width={25} height={25} alt='startify-logo'/>
                     <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Home</Link>
-                    <Link href={'/'} className='dark:hover:text-white duration-200 hover:text-black'>Docs</Link>
                     <Link href={'https://soufianboukir.com'} className='dark:hover:text-white duration-200 hover:text-black'>Developer</Link>
                     <Link href={'/privacy-policy'} className='dark:hover:text-white duration-200 hover:text-black'>Privacy policy</Link>
                     <Link href={'/terms-of-service'} className='dark:hover:text-white duration-200 hover:text-black'>Terms of service</Link>

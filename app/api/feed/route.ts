@@ -74,6 +74,7 @@ export const GET = async (req: NextRequest) => {
             'author.name': 1,
             'author.username': 1,
             'author.image': 1,
+            'author.headLine': 1,
           }
         },
         {
