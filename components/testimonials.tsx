@@ -133,7 +133,7 @@ export default function Testimonials() {
     const bottom = duplicatedTestimonials.slice(10, 30);
   
     return (
-      <div className="w-full max-w-5xl mx-auto">
+      <div className="w-full max-w-5xl mx-auto" id='what-people-say'>
         <div className="text-center mb-12 px-4">
           <h2 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl mb-4">
             What People Say

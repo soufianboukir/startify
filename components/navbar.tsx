@@ -1,11 +1,16 @@
+'use client'
+
 import { SearchInput } from '@/components/search-input'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
+import { Session } from 'next-auth'
 import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
+import { ProfileMenu } from './dropdown-menu'
+import { Link as ScrollLink } from 'react-scroll';
+import Link from 'next/link'
 
-export const Navbar = () => {
+export const Navbar = ({ session }: { session?: Session}) => {
     return (
         <div className="flex justify-between fixed w-full z-20 bg-transparent backdrop-blur-2xl py-6 lg:px-[6%] md:px-8 px-5 items-center">
             <div>
@@ -19,16 +24,27 @@ export const Navbar = () => {
             </div>
 
             <div className='flex gap-5 items-center text-sm font-medium'>
-                <Link href={'/help'}>Getting started</Link>
-                <Link href={'/help'}>Components</Link>
-                <Link href={'/help'}>Documentation</Link>
+                <ScrollLink to='getting-started' smooth duration={500} className='cursor-pointer'>Getting started</ScrollLink>
+                <ScrollLink to='how-it-works' smooth duration={500} className='cursor-pointer'>How it works</ScrollLink>
+                <ScrollLink to='faqs' smooth duration={500} className='cursor-pointer'>FAQs</ScrollLink>
+                <ScrollLink to='what-people-say' smooth duration={500} className='cursor-pointer'>Testimonials</ScrollLink>
             </div>
 
             <div className='flex items-center gap-2'>
                 <SearchInput />
                 <ThemeToggle />
-                <Button variant={'outline'}>Sign in</Button>
-                <Button variant={'default'}>Get started</Button>
+                {
+                    session ? 
+                        <ProfileMenu session={session}/>
+                    : <>
+                        <Button variant={'outline'}>
+                            <Link href={'/login'}>Sign in</Link>
+                        </Button>
+                        <Button variant={'default'}>
+                            <Link href={'/feed'}>Get started</Link>
+                        </Button>
+                    </>
+                }
             </div>
         </div>
     )

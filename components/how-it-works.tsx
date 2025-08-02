@@ -50,7 +50,7 @@ const steps = [
 
 export const HowItWorks = () => {
   return (
-    <section className="min-h-screen lg:px-[6%] md:px-8 px-5 py-10">
+    <section className="min-h-screen lg:px-[6%] md:px-8 px-5 py-10" id='how-it-works'>
       <div className="mb-8 max-w-3xl">
         <h1 className="text-3xl font-semibold mb-4">How it works?</h1>
         <p className="font-medium text-gray-600 dark:text-gray-300">

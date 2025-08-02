@@ -56,10 +56,10 @@ import { BackgroundBeams } from './ui/background-beams'
   ]
   
 
-export default function Example() {
+export default function Hero() {
 
   return (
-        <div>
+        <div id='getting-started'>
             <div className="relative isolate px-6 lg:px-8">
                 <div
                     aria-hidden="true"
@@ -72,6 +72,11 @@ export default function Example() {
                 </div>
 
                 <BackgroundBeams />
+                <div className="fixed bottom-4 left-4 px-4 py-2 bg-white dark:bg-zinc-900 border border-blue-500 shadow-lg animate-fade-in font-semibold rounded-full">
+                  <a className="text-sm text-gray-700 dark:text-gray-300" href='https://soufianboukir.com' target='_blank'>
+                    Built with ❤️ by <span className="text-blue-600 font-semibold">Soufian</span>
+                  </a>
+                </div>
 
                 <div className="mx-auto max-w-6xl lg:py-40 py-30 dark:text-white">
                     <div className="hidden sm:mb-8 sm:flex sm:justify-center">

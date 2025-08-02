@@ -1,9 +1,40 @@
+'use client'
+
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
+import { Textarea } from './ui/textarea'
+import { api } from '@/config/api'
+import { Loader } from 'lucide-react'
 
 export const Footer = () => {
+    const [email, setEmail] = useState('')
+    const [message, setMessage] = useState('')
+    const [status, setStatus] = useState<null | 'success' | 'error'>(null)
+    const [loading,setLoading] = useState(false)
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if(email === '' || message === '') return 
+        setLoading(true)
+        try{
+            setStatus(null)
+            const res = await api.post(`/contact`,{email, message})
+    
+            if (res.status === 200) {
+                setStatus('success')
+                setEmail('')
+                setMessage('')
+            } else {
+                setStatus('error')
+            }
+        }catch{
+            setStatus('error')
+        }finally{
+            setLoading(false)
+        }
+    }
     return (
         <footer className=" pt-12 px-6">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -17,31 +48,41 @@ export const Footer = () => {
                 <div>
                 <h3 className="text-lg font-semibold mb-3">Explore</h3>
                 <ul className="space-y-2 text-sm text-gray-400">
-                    <li><Link href="/ideas" className="hover:text-white">Browse Ideas</Link></li>
-                    <li><Link href="/submit" className="hover:text-white">Submit Idea</Link></li>
-                    <li><Link href="/feedback" className="hover:text-white">Get Feedback</Link></li>
-                    <li><Link href="/collaborators" className="hover:text-white">Find Collaborators</Link></li>
+                    <li><Link href="/ideas" className="hover:">Browse Ideas</Link></li>
+                    <li><Link href="/submit" className="hover:">Submit Idea</Link></li>
+                    <li><Link href="/feedback" className="hover:">Get Feedback</Link></li>
+                    <li><Link href="/collaborators" className="hover:">Find Collaborators</Link></li>
                 </ul>
                 </div>
 
                 <div>
                 <h3 className="text-lg font-semibold mb-3">About</h3>
                 <ul className="space-y-2 text-sm text-gray-400">
-                    <li><Link href="https://soufianboukir.com" className="hover:text-white">Developer</Link></li>
-                    <li><Link href="/support" className="hover:text-white">Support</Link></li>
-                    <li><Link href="/terms-of-service" className="hover:text-white">Terms of Service</Link></li>
-                    <li><Link href="/privacy-policy" className="hover:text-white">Privacy Policy</Link></li>
+                    <li><Link href="https://soufianboukir.com" className="">Developer</Link></li>
+                    <li><Link href="/support" className="hover:">Support</Link></li>
+                    <li><Link href="/terms-of-service" className="hover:">Terms of Service</Link></li>
+                    <li><Link href="/privacy-policy" className="hover:">Privacy Policy</Link></li>
                 </ul>
                 </div>
 
                 <div>
                 <h3 className="text-lg font-semibold mb-3">Stay Connected</h3>
-                <form className="flex flex-col space-y-3">
+                <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
                     <Input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Your email"
+                    required
                     />
-                    <Button>Contact</Button>
+                    <Textarea placeholder='Your message' required value={message} onChange={(e) => setMessage(e.target.value)}/>
+                    <Button disabled={loading} className='cursor-pointer'>
+                        {
+                            loading ? <><Loader className='animate-spin'/> Sending</> : "Contact"
+                        }
+                    </Button>
+                    {status === 'success' && <p className="text-green-600 text-sm">Message sent! thank you</p>}
+                    {status === 'error' && <p className="text-red-500 text-sm">Failed to send message.</p>}
                 </form>
                 </div>
             </div>

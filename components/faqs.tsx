@@ -37,7 +37,7 @@ const faqs = [
   
 export const FAQs = () => {
     return (
-        <div className='min-h-screen lg:px-[6%] md:px-8 px-5 py-24 flex gap-6 md:flex-row flex-col md:gap-0 md:justify-between'>
+        <div className='min-h-screen lg:px-[6%] md:px-8 px-5 py-24 flex gap-6 md:flex-row flex-col md:gap-0 md:justify-between' id='faqs'>
             <div className='md:w-[40%]'>
                 <h1 className='text-3xl font-semibold'>Frequently Asked Questions</h1>
             </div>

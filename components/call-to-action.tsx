@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export default function CallToAction() {
   return (
@@ -14,10 +15,10 @@ export default function CallToAction() {
 
         <div className='flex gap-3 justify-center'>
             <Button variant={'outline'}>
-                Github
+                <Link href={'https://github.com/soufianboukir/startify'}>Github</Link>
             </Button>
             <Button>
-                Get started
+                <Link href={'/feed'}>Get started</Link>
             </Button>
         </div>
     </section>
