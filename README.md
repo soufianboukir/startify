@@ -56,19 +56,8 @@ Startify is a collaborative platform designed for innovators and entrepreneurs t
 - Review and manage reported ideas, comments, and users  
 - Handle user deletion requests  
 
-## Installation
-
-1. Clone the repository  
-   ```bash
-   git clone https://github.com/soufianboukir/startify.git
-   cd startify
-
-2. cp .env.example .env and configure it!
-
-3. Run application
-  ```bash
-    npm run dev
-  ```
+⚠️ This repository is public for viewing only. 
+Usage, reproduction, or distribution of the code is strictly prohibited without explicit permission.
 
 built with ❤️ by **soufian**.
 
