@@ -10,7 +10,7 @@ const faqs = [
     {
       question: "Do I need an account to browse ideas?",
       answer:
-        "No, you can explore public ideas without signing up. However, to comment, vote, or follow users, you’ll need to create an account so your actions can be saved and personalized."
+        "Yes, you need an account to explore ideas, this helps as know what you like and what you don't also to comment, vote, or follow users, you’ll need to create an account so your actions can be saved and personalized."
     },
     {
       question: "How can I post an idea?",
